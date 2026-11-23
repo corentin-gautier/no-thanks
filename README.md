@@ -13,7 +13,7 @@ Install the plugin (composer: `cgsoft/no-thanks`), activate it, then fill Settin
 
 Footer link: `no_thanks_link()` prints a « Cookies » link while the banner is on; in a block footer, link to `#no-thanks`.
 
-Theming: buttons get the `wp-element-button` class (theme.json button styles). Every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`, `--no-thanks-accent`, `--no-thanks-accent-color`, `--no-thanks-radius`, `--no-thanks-shadow`, `--no-thanks-offset`. Filter `no_thanks_config` to change anything passed to the script.
+Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`, `--no-thanks-accent`, `--no-thanks-accent-color`, `--no-thanks-radius`, `--no-thanks-shadow`, `--no-thanks-offset`. Filter `no_thanks_config` to change anything passed to the script.
 
 ## Any site
 

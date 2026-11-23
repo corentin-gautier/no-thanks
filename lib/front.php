@@ -27,7 +27,6 @@ add_action( 'wp_enqueue_scripts', function () {
 		'privacyUrl'  => $page ?: '',
 		// A new tool or script asks the visitors again
 		'revision'    => substr( md5( $options['services'] . $options['head'] . $options['body'] ), 0, 8 ),
-		'buttonClass' => 'wp-element-button',
 		'texts'       => [
 			'label'        => __( 'Cookies and trackers', 'no-thanks' ),
 			/* translators: {purpose} and {services} are replaced, keep them as is. */
@@ -42,7 +41,6 @@ add_action( 'wp_enqueue_scripts', function () {
 			'accept'       => __( 'OK', 'no-thanks' ),
 			'acceptAnyway' => __( 'Allow anyway', 'no-thanks' ),
 			'more'         => __( 'Learn more', 'no-thanks' ),
-			'close'        => __( 'Close', 'no-thanks' ),
 		],
 	] );
 

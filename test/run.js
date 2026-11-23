@@ -35,6 +35,7 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   let page = await fresh();
   check('first visit shows the banner', await shown(page) === 1);
   check('nothing runs before consent', await runs(page) === '');
+  check('first visit leaves the focus alone', await page.evaluate(() => document.activeElement === document.body));
   await page.getByRole('button', { name: 'OK' }).click();
   check('accept runs everything in order', await runs(page) === 'template,nested,plain');
   check('banner closes', await shown(page) === 0);

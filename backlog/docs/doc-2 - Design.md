@@ -7,6 +7,7 @@ type: guide
 ## Principles
 
 - Native first: `<dialog>` shown non-modal (no cookie wall), no library, about 2 KB gzipped.
+- Discreet: a compact strip in a corner (about 540 × 56 px on desktop), one sentence with « Learn more » inline, two small buttons of equal weight. Unasked, it never takes the focus; reopened from a link, it does, and Escape closes it. Its buttons are its own, not the theme's (theme buttons are too big here); colours come from `--no-thanks-*`.
 - Nothing loaded while no tracker is set (plugin).
 - No cookie: the choice is in `localStorage` (`no-thanks`: `{ v, t, r }` = choice, time, revision), kept `maxAge` days.
 - One choice for every tracker of the site: sites rarely have more than one. Per-purpose choices only if a site needs them.

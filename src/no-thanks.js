@@ -33,7 +33,6 @@
     accept: 'OK',
     acceptAnyway: 'Allow anyway',
     more: 'Learn more',
-    close: 'Close',
     ...config.texts,
   };
 
@@ -132,7 +131,7 @@
     opener = null;
   };
 
-  /** Shows the banner; `reopened` when asked for from a link (adds the current state and a close button). */
+  /** Shows the banner; `reopened` when asked for from a link (adds the current state; Escape closes it). */
   const open = reopened => {
     dialog?.remove();
     const id = 'no-thanks-text';
@@ -140,24 +139,26 @@
     dialog.setAttribute('aria-describedby', id);
     const signal = doNotTrack && !choice;
 
-    if (reopened) dialog.append(node('button', 'no-thanks__close', { type: 'button', textContent: '×', ariaLabel: texts.close, onclick: close }));
-    dialog.append(fill(node('p', 'no-thanks__text', { id }), signal ? texts.dnt : texts.message, { purpose: config.purpose }));
-
+    const text = fill(node('p', 'no-thanks__text', { id }), signal ? texts.dnt : texts.message, { purpose: config.purpose });
+    if (config.privacyUrl) text.append(' ', node('a', 'no-thanks__more', { href: config.privacyUrl, textContent: texts.more }));
     if (reopened && choice) {
       const date = new Date(choice.t).toLocaleDateString(document.documentElement.lang || undefined, { dateStyle: 'long' });
-      dialog.append(fill(node('p', 'no-thanks__state'), texts.state, { choice: choice.v ? texts.accepted : texts.refused, date }));
+      text.append(fill(node('span', 'no-thanks__state'), texts.state, { choice: choice.v ? texts.accepted : texts.refused, date }));
     }
+    dialog.append(text);
 
     const actions = node('div', 'no-thanks__actions');
     if (signal) actions.append(button(texts.acceptAnyway, () => save(true)));
     else actions.append(button(texts.refuse, () => save(false)), button(texts.accept, () => save(true)));
-    if (config.privacyUrl) actions.append(node('a', 'no-thanks__more', { href: config.privacyUrl, textContent: texts.more }));
     dialog.append(actions);
 
     if (reopened) dialog.addEventListener('keydown', e => e.key === 'Escape' && close());
     document.body.append(dialog);
-    dialog.show();
-    if (reopened) dialog.querySelector('.no-thanks__actions button').focus();
+    // Unasked, it leaves the focus where it is; asked for, it takes it
+    if (reopened) {
+      dialog.show();
+      dialog.querySelector('.no-thanks__actions button').focus();
+    } else dialog.setAttribute('open', '');
   };
 
   document.addEventListener('click', e => {
