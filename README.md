@@ -1,12 +1,32 @@
 # No Thanks
 
-An ultra-light consent banner: about 2.5 KB gzipped (3 KB with purposes), no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal; a short notice tells the visitor once, then fades out.
+An ultra-light consent banner: about 3.3 KB gzipped, CSS included (4.1 KB with purposes), no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal; a short notice tells the visitor once, then fades out.
 
 - A small, non-blocking banner; « No thanks » and « OK » weigh the same.
 - Blocked code only runs once the visitor agrees.
 - Several purposes (audience, videos, ads…): one click still decides everything, « Choose » gives one switch per purpose. Never a list of cookies.
 - The choice is kept in `localStorage` for 6 months, and asked again when the trackers change.
 - Once the banner is closed, a small cookie button in the corner shows the state (green check when allowed, amber dash when only some purposes are, crossed out otherwise) and reopens it; any link to `#no-thanks` does too, so visitors can change their mind. Refusing after agreeing deletes the trackers' cookies and reloads the page.
+
+## Weight
+
+What a visitor downloads for the banner on a first visit, compressed:
+
+| | KB | Requests |
+|---|---:|---:|
+| **No Thanks** | **3.3** | **1** (CSS inlined by the plugin) |
+| **No Thanks, with purposes** | **4.1** | **1** |
+| CookieYes | 32 | 9 |
+| tarteaucitron.js | 84 | 4 |
+| Usercentrics | 137 | 5 |
+| Cookiebot | 163 | 4 |
+| OneTrust | 209 | 13 |
+| Didomi | 210 | 3 |
+| Axeptio | 290 | 9 |
+
+No Thanks: `dist/` files, JS + CSS, gzipped. Self-hosted libraries for reference, JS + CSS gzipped: CookieConsent v3 ≈ 16 KB, Complianz (WordPress) ≈ 15 KB, Klaro ≈ 67 KB.
+
+The others as their vendors run them on their own site, measured on 24 November 2026 from France: every request to the CMP's own domains (scripts, styles, config, translations), counted in the compressed bytes a browser gets (br or gzip). A site's own setup (number of services, languages, design) moves these figures. Run `npm run cmp-sizes` to measure again.
 
 ## WordPress
 
