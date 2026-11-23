@@ -8,38 +8,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: no-thanks\n"
 
+msgid "A consent banner for the trackers this site uses. Leave the scripts empty and nothing is loaded."
+msgstr "Un bandeau de consentement pour les traceurs du site. Laissez les scripts vides et rien n’est chargé."
+
+msgid "Accept button"
+msgstr "Bouton d’acceptation"
+
+msgid "Added to the footer by the theme. Any other link to #no-thanks also reopens the banner."
+msgstr "Ajouté au pied de page par le thème. Tout autre lien vers #no-thanks rouvre aussi le bandeau."
+
+msgid "Allow anyway"
+msgstr "L’autoriser quand même"
+
+msgid "Banner"
+msgstr "Bandeau"
+
+msgid "Button to allow anyway"
+msgstr "Bouton pour autoriser quand même"
+
 msgid "Cookies"
 msgstr "Cookies"
-
-msgid "a measurement tool"
-msgstr "un outil de mesure"
-
-msgid "measure its audience"
-msgstr "mesurer son audience"
-
-msgid "show you advertising"
-msgstr "vous montrer de la publicité"
-
-msgid "measure its advertising campaigns"
-msgstr "mesurer ses campagnes publicitaires"
 
 msgid "Cookies and trackers"
 msgstr "Cookies et traceurs"
 
-msgid "This site would like to {purpose} with {services}. Is that OK?"
-msgstr "Ce site aimerait {purpose} avec {services}. Vous êtes d’accord ?"
+msgid "Footer link"
+msgstr "Lien de pied de page"
 
-msgid "Your browser asks not to be tracked: {services} stays off."
-msgstr "Votre navigateur demande à ne pas être suivi : {services} reste désactivé."
+msgid "Learn more"
+msgstr "En savoir plus"
 
-msgid "Your choice: {choice}, on {date}."
-msgstr "Votre choix : {choice}, le {date}."
+msgid "Message"
+msgstr "Message"
 
-msgid "accepted"
-msgstr "accepté"
+msgid "Message when the browser asks not to be tracked"
+msgstr "Message quand le navigateur demande à ne pas être suivi"
 
-msgid "refused"
-msgstr "refusé"
+msgid "Name the services and what they are for. Changing it asks every visitor again."
+msgstr "Nommez les services et leur usage. Le modifier redemande l’accord de tous les visiteurs."
 
 msgid "No thanks"
 msgstr "Non merci"
@@ -47,47 +53,44 @@ msgstr "Non merci"
 msgid "OK"
 msgstr "D’accord"
 
-msgid "Allow anyway"
-msgstr "L’autoriser quand même"
+msgid "Paste the code as the service gives it. It only runs once the visitor agrees."
+msgstr "Collez le code tel que le service le donne. Il ne s’exécute qu’après l’accord du visiteur."
 
-msgid "Learn more"
-msgstr "En savoir plus"
+msgid "Refuse button"
+msgstr "Bouton de refus"
 
-msgid "Settings"
-msgstr "Réglages"
+msgid "Reminder after accepting"
+msgstr "Rappel après acceptation"
 
-msgid "A consent banner for the trackers this site uses. Leave the scripts empty and nothing is loaded."
-msgstr "Un bandeau de consentement pour les traceurs du site. Laissez les scripts vides et rien n’est chargé."
-
-msgid "Services"
-msgstr "Services"
-
-msgid "Named in the banner, e.g. Google Analytics, Meta Pixel."
-msgstr "Nommés dans le bandeau, par exemple Google Analytics, Meta Pixel."
-
-msgid "Purpose"
-msgstr "Finalité"
-
-msgid "Completes “This site would like to … with these services”, e.g. %s."
-msgstr "Complète « Ce site aimerait … avec ces services », par exemple %s."
-
-msgid "Scripts in the head"
-msgstr "Scripts dans le head"
+msgid "Reminder after refusing"
+msgstr "Rappel après refus"
 
 msgid "Scripts at the end of the page"
 msgstr "Scripts en fin de page"
 
-msgid "Paste the code as the service gives it. It only runs once the visitor agrees."
-msgstr "Collez le code tel que le service le donne. Il ne s’exécute qu’après l’accord du visiteur."
+msgid "Scripts in the head"
+msgstr "Scripts dans le head"
 
-msgid "“Learn more” page"
-msgstr "Page « En savoir plus »"
+msgid "Settings"
+msgstr "Réglages"
 
-msgid "Privacy policy page (Settings › Privacy)"
-msgstr "Page de politique de confidentialité (Réglages › Confidentialité)"
+msgid "Shown only from the footer link: such visitors get no banner and no tracker."
+msgstr "Affiché seulement depuis le lien de pied de page : ces visiteurs n’ont ni bandeau ni traceur."
 
-msgid "Footer link"
-msgstr "Lien de pied de page"
+msgid "Shown when the banner is reopened; {date} is replaced by the date of the choice."
+msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la date du choix."
 
-msgid "Any link to %s reopens the banner, so visitors can change their mind: add one to the footer menu."
-msgstr "Tout lien vers %s rouvre le bandeau pour que le visiteur change d’avis : ajoutez-en un au menu du pied de page."
+msgid "This site would like to measure its audience. Is that OK?"
+msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
+
+msgid "Trackers"
+msgstr "Traceurs"
+
+msgid "You agreed on {date}."
+msgstr "Vous avez accepté le {date}."
+
+msgid "You refused on {date}."
+msgstr "Vous avez refusé le {date}."
+
+msgid "Your browser asks not to be tracked: the trackers stay off."
+msgstr "Votre navigateur demande à ne pas être suivi : les traceurs restent désactivés."

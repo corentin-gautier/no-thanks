@@ -6,15 +6,14 @@
  * The choice is kept in localStorage (no cookie). Do Not Track and Global Privacy Control
  * count as a refusal. Any link to `#no-thanks` reopens the banner.
  *
- * Config: `window.noThanksConfig = { services, purpose, privacyUrl, revision, maxAge, cookies, buttonClass, texts }`
+ * Config: `window.noThanksConfig = { privacyUrl, revision, maxAge, cookies, buttonClass, texts }`;
+ * `texts.message` and `texts.dnt` are HTML (the site owner's own text).
  * set before this script runs.
  */
 (() => {
   const KEY = 'no-thanks';
   const DAY = 864e5;
   const config = {
-    services: '',
-    purpose: 'measure its audience',
     privacyUrl: '',
     revision: '',
     maxAge: 182,
@@ -24,11 +23,10 @@
   };
   const texts = {
     label: 'Cookies and trackers',
-    message: 'This site would like to {purpose} with {services}. Is that OK?',
-    dnt: 'Your browser asks not to be tracked: {services} stays off.',
-    state: 'Your choice: {choice}, on {date}.',
-    accepted: 'accepted',
-    refused: 'refused',
+    message: 'This site would like to measure its audience. Is that OK?',
+    dnt: 'Your browser asks not to be tracked: the trackers stay off.',
+    accepted: 'You agreed on {date}.',
+    refused: 'You refused on {date}.',
     refuse: 'No thanks',
     accept: 'OK',
     acceptAnyway: 'Allow anyway',
@@ -104,18 +102,6 @@
     else if (had) { clean(); location.reload(); }
   };
 
-  /** Fills `el` with `text`, `{name}` placeholders replaced (services in bold). */
-  const fill = (el, text, vars) => {
-    text.split(/\{(\w+)\}/).forEach((part, i) => {
-      if (!(i % 2)) return el.append(part);
-      if (part !== 'services') return el.append(vars[part] ?? '');
-      const b = document.createElement('b');
-      b.textContent = config.services;
-      el.append(b);
-    });
-    return el;
-  };
-
   const node = (tag, cls, attrs = {}) => Object.assign(document.createElement(tag), { className: cls }, attrs);
 
   const button = (label, onclick) => node('button', `no-thanks__button ${config.buttonClass}`.trim(), {
@@ -139,11 +125,11 @@
     dialog.setAttribute('aria-describedby', id);
     const signal = doNotTrack && !choice;
 
-    const text = fill(node('p', 'no-thanks__text', { id }), signal ? texts.dnt : texts.message, { purpose: config.purpose });
+    const text = node('p', 'no-thanks__text', { id, innerHTML: signal ? texts.dnt : texts.message });
     if (config.privacyUrl) text.append(' ', node('a', 'no-thanks__more', { href: config.privacyUrl, textContent: texts.more }));
     if (reopened && choice) {
       const date = new Date(choice.t).toLocaleDateString(document.documentElement.lang || undefined, { dateStyle: 'long' });
-      text.append(fill(node('span', 'no-thanks__state'), texts.state, { choice: choice.v ? texts.accepted : texts.refused, date }));
+      text.append(node('span', 'no-thanks__state', { textContent: (choice.v ? texts.accepted : texts.refused).replace('{date}', date) }));
     }
     dialog.append(text);
 

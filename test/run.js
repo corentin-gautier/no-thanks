@@ -45,7 +45,7 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
 
   // Footer link, Escape, focus back
   await page.click('#settings');
-  check('link reopens with the state', (await page.locator('.no-thanks__state').textContent()).includes('accepted'));
+  check('link reopens with the state', (await page.locator('.no-thanks__state').textContent()).includes('You agreed on'));
   await page.keyboard.press('Escape');
   check('Escape closes', await shown(page) === 0);
   check('focus back on the link', await page.evaluate(() => document.activeElement.id) === 'settings');

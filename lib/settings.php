@@ -1,6 +1,6 @@
 <?php
 /**
- * Settings › No Thanks: what the banner names and the scripts it holds back.
+ * Settings › No Thanks: the scripts the banner holds back and every text it shows.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -36,30 +36,72 @@ add_action( 'admin_init', function () {
 } );
 
 /**
- * Keeps the scripts as pasted, but only from a user allowed to post raw HTML.
+ * Keeps the scripts as pasted, but only from a user allowed to post raw HTML. Messages keep bold, italic and links.
  */
 function no_thanks_sanitize( $input ): array {
-	$old   = no_thanks_options();
-	$input = is_array( $input ) ? $input : [];
-	$raw   = current_user_can( 'unfiltered_html' );
-
-	return [
-		'services' => sanitize_text_field( $input['services'] ?? '' ),
-		'purpose'  => sanitize_text_field( $input['purpose'] ?? '' ),
-		'head'     => $raw ? trim( $input['head'] ?? '' ) : $old['head'],
-		'body'     => $raw ? trim( $input['body'] ?? '' ) : $old['body'],
-		'page'     => absint( $input['page'] ?? 0 ),
+	$old    = no_thanks_options();
+	$input  = is_array( $input ) ? $input : [];
+	$raw    = current_user_can( 'unfiltered_html' );
+	$inline = [
+		'a'      => [ 'href' => true, 'target' => true, 'rel' => true ],
+		'strong' => [],
+		'b'      => [],
+		'em'     => [],
+		'i'      => [],
+		'br'     => [],
 	];
+
+	$clean = [
+		'head' => $raw ? trim( $input['head'] ?? '' ) : $old['head'],
+		'body' => $raw ? trim( $input['body'] ?? '' ) : $old['body'],
+	];
+	foreach ( [ 'message', 'dnt' ] as $key ) {
+		// The editor wraps paragraphs: the banner holds one line, breaks become <br>
+		$html          = preg_replace( '#</p>\s*<p[^>]*>#i', '<br>', $input[ $key ] ?? '' );
+		$clean[ $key ] = trim( wp_kses( $html, $inline ) );
+	}
+	foreach ( [ 'refuse', 'accept', 'accept_anyway', 'accepted', 'refused', 'link' ] as $key ) {
+		$clean[ $key ] = sanitize_text_field( $input[ $key ] ?? '' );
+	}
+	return $clean;
+}
+
+/**
+ * A small visual editor (bold, italic, link) for a banner message.
+ */
+function no_thanks_editor( string $key, string $value ): void {
+	wp_editor( $value, "no-thanks-$key", [
+		'textarea_name' => "no_thanks[$key]",
+		'textarea_rows' => 3,
+		'media_buttons' => false,
+		'teeny'         => true,
+		'quicktags'     => false,
+		'tinymce'       => [
+			'toolbar1'      => 'bold,italic,link,unlink',
+			'toolbar2'      => '',
+			'statusbar'     => false,
+			'height'        => 90,
+			'forced_root_block' => 'p',
+		],
+	] );
 }
 
 function no_thanks_settings_page(): void {
 	$o   = no_thanks_options();
 	$raw = current_user_can( 'unfiltered_html' );
-	$purposes = [
-		__( 'measure its audience', 'no-thanks' ),
-		__( 'show you advertising', 'no-thanks' ),
-		__( 'measure its advertising campaigns', 'no-thanks' ),
-	];
+	$row = function ( string $key, string $label, string $help = '' ) use ( $o ): void {
+		?>
+		<tr>
+			<th scope="row"><label for="no-thanks-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
+			<td>
+				<input type="text" id="no-thanks-<?php echo esc_attr( $key ); ?>" class="regular-text" name="no_thanks[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $o[ $key ] ); ?>">
+				<?php if ( $help ) : ?>
+					<p class="description"><?php echo esc_html( $help ); ?></p>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php
+	};
 	?>
 	<div class="wrap">
 		<h1>No Thanks</h1>
@@ -67,31 +109,9 @@ function no_thanks_settings_page(): void {
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'no_thanks' ); ?>
+
+			<h2><?php esc_html_e( 'Trackers', 'no-thanks' ); ?></h2>
 			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><label for="no-thanks-services"><?php esc_html_e( 'Services', 'no-thanks' ); ?></label></th>
-					<td>
-						<input type="text" id="no-thanks-services" class="regular-text" name="no_thanks[services]" value="<?php echo esc_attr( $o['services'] ); ?>" placeholder="Google Analytics">
-						<p class="description"><?php esc_html_e( 'Named in the banner, e.g. Google Analytics, Meta Pixel.', 'no-thanks' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="no-thanks-purpose"><?php esc_html_e( 'Purpose', 'no-thanks' ); ?></label></th>
-					<td>
-						<input type="text" id="no-thanks-purpose" class="regular-text" name="no_thanks[purpose]" value="<?php echo esc_attr( $o['purpose'] ); ?>" placeholder="<?php echo esc_attr( $purposes[0] ); ?>" list="no-thanks-purposes">
-						<datalist id="no-thanks-purposes">
-							<?php foreach ( $purposes as $purpose ) : ?>
-								<option value="<?php echo esc_attr( $purpose ); ?>"></option>
-							<?php endforeach; ?>
-						</datalist>
-						<p class="description">
-							<?php
-							/* translators: %s: an example purpose */
-							printf( esc_html__( 'Completes “This site would like to … with these services”, e.g. %s.', 'no-thanks' ), esc_html( $purposes[0] ) );
-							?>
-						</p>
-					</td>
-				</tr>
 				<?php foreach ( [ 'head' => __( 'Scripts in the head', 'no-thanks' ), 'body' => __( 'Scripts at the end of the page', 'no-thanks' ) ] as $key => $label ) : ?>
 					<tr>
 						<th scope="row"><label for="no-thanks-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
@@ -103,31 +123,34 @@ function no_thanks_settings_page(): void {
 						</td>
 					</tr>
 				<?php endforeach; ?>
+			</table>
+
+			<h2><?php esc_html_e( 'Banner', 'no-thanks' ); ?></h2>
+			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><label for="no-thanks-page"><?php esc_html_e( '“Learn more” page', 'no-thanks' ); ?></label></th>
+					<th scope="row"><?php esc_html_e( 'Message', 'no-thanks' ); ?></th>
 					<td>
-						<?php
-						wp_dropdown_pages( [
-							'name'              => 'no_thanks[page]',
-							'id'                => 'no-thanks-page',
-							'selected'          => (int) $o['page'],
-							'show_option_none'  => __( 'Privacy policy page (Settings › Privacy)', 'no-thanks' ),
-							'option_none_value' => 0,
-						] );
-						?>
+						<?php no_thanks_editor( 'message', $o['message'] ); ?>
+						<p class="description"><?php esc_html_e( 'Name the services and what they are for. Changing it asks every visitor again.', 'no-thanks' ); ?></p>
 					</td>
 				</tr>
+				<?php
+				$row( 'refuse', __( 'Refuse button', 'no-thanks' ) );
+				$row( 'accept', __( 'Accept button', 'no-thanks' ) );
+				?>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Footer link', 'no-thanks' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Message when the browser asks not to be tracked', 'no-thanks' ); ?></th>
 					<td>
-						<p class="description">
-							<?php
-							/* translators: %s: the link address */
-							printf( esc_html__( 'Any link to %s reopens the banner, so visitors can change their mind: add one to the footer menu.', 'no-thanks' ), '<code>#no-thanks</code>' );
-							?>
-						</p>
+						<?php no_thanks_editor( 'dnt', $o['dnt'] ); ?>
+						<p class="description"><?php esc_html_e( 'Shown only from the footer link: such visitors get no banner and no tracker.', 'no-thanks' ); ?></p>
 					</td>
 				</tr>
+				<?php
+				$row( 'accept_anyway', __( 'Button to allow anyway', 'no-thanks' ) );
+				$row( 'accepted', __( 'Reminder after accepting', 'no-thanks' ), __( 'Shown when the banner is reopened; {date} is replaced by the date of the choice.', 'no-thanks' ) );
+				$row( 'refused', __( 'Reminder after refusing', 'no-thanks' ) );
+				$row( 'link', __( 'Footer link', 'no-thanks' ), __( 'Added to the footer by the theme. Any other link to #no-thanks also reopens the banner.', 'no-thanks' ) );
+				?>
 			</table>
 			<?php submit_button(); ?>
 		</form>

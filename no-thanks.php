@@ -23,18 +23,42 @@ add_action( 'init', function () {
 } );
 
 /**
- * Plugin options, with defaults.
+ * Default texts, in the site language. The message links to the privacy policy page when there is one.
  *
- * @return array{services: string, purpose: string, head: string, body: string, page: int}
+ * @return array<string, string>
+ */
+function no_thanks_defaults(): array {
+	$privacy = get_privacy_policy_url();
+	$message = __( 'This site would like to measure its audience. Is that OK?', 'no-thanks' );
+	if ( $privacy ) {
+		$message .= sprintf( ' <a href="%s">%s</a>', esc_url( $privacy ), __( 'Learn more', 'no-thanks' ) );
+	}
+
+	return [
+		'message'       => $message,
+		'dnt'           => __( 'Your browser asks not to be tracked: the trackers stay off.', 'no-thanks' ),
+		'refuse'        => __( 'No thanks', 'no-thanks' ),
+		'accept'        => __( 'OK', 'no-thanks' ),
+		'accept_anyway' => __( 'Allow anyway', 'no-thanks' ),
+		/* translators: {date} is replaced, keep it as is. */
+		'accepted'      => __( 'You agreed on {date}.', 'no-thanks' ),
+		/* translators: {date} is replaced, keep it as is. */
+		'refused'       => __( 'You refused on {date}.', 'no-thanks' ),
+		'link'          => __( 'Cookies', 'no-thanks' ),
+	];
+}
+
+/**
+ * Plugin options: the texts (an empty one falls back to its default) and the blocked scripts.
+ *
+ * @return array<string, string>
  */
 function no_thanks_options(): array {
-	return wp_parse_args( get_option( 'no_thanks', [] ), [
-		'services' => '',
-		'purpose'  => '',
-		'head'     => '',
-		'body'     => '',
-		'page'     => 0,
-	] );
+	$options = array_merge( [ 'head' => '', 'body' => '' ], (array) get_option( 'no_thanks', [] ) );
+	foreach ( no_thanks_defaults() as $key => $default ) {
+		$options[ $key ] = ( $options[ $key ] ?? '' ) ?: $default;
+	}
+	return $options;
 }
 
 /**
@@ -48,11 +72,11 @@ function no_thanks_active(): bool {
 /**
  * A link that reopens the banner, for a footer. Empty while the banner is off.
  *
- * @param string $label Link text, "Cookies" by default.
+ * @param string $label Link text, the one set in Settings › No Thanks by default.
  */
 function no_thanks_link( string $label = '' ): string {
 	if ( ! no_thanks_active() ) {
 		return '';
 	}
-	return sprintf( '<a href="#no-thanks">%s</a>', esc_html( $label ?: __( 'Cookies', 'no-thanks' ) ) );
+	return sprintf( '<a href="#no-thanks">%s</a>', esc_html( $label ?: no_thanks_options()['link'] ) );
 }

@@ -12,7 +12,6 @@ add_action( 'wp_enqueue_scripts', function () {
 
 	$options = no_thanks_options();
 	$dir     = plugin_dir_path( __DIR__ ) . 'dist/';
-	$page    = $options['page'] ? get_permalink( $options['page'] ) : get_privacy_policy_url();
 
 	// A few hundred bytes: inlined rather than one more request
 	wp_register_style( 'no-thanks', false, [], NO_THANKS_VERSION );
@@ -22,25 +21,17 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_script( 'no-thanks', plugins_url( 'dist/no-thanks.js', __DIR__ ), [], NO_THANKS_VERSION, [ 'strategy' => 'defer' ] );
 
 	$config = apply_filters( 'no_thanks_config', [
-		'services'    => $options['services'] ?: __( 'a measurement tool', 'no-thanks' ),
-		'purpose'     => $options['purpose'] ?: __( 'measure its audience', 'no-thanks' ),
-		'privacyUrl'  => $page ?: '',
-		// A new tool or script asks the visitors again
-		'revision'    => substr( md5( $options['services'] . $options['head'] . $options['body'] ), 0, 8 ),
-		'texts'       => [
+		// New trackers or a new message ask the visitors again
+		'revision' => substr( md5( $options['message'] . $options['head'] . $options['body'] ), 0, 8 ),
+		'texts'    => [
 			'label'        => __( 'Cookies and trackers', 'no-thanks' ),
-			/* translators: {purpose} and {services} are replaced, keep them as is. */
-			'message'      => __( 'This site would like to {purpose} with {services}. Is that OK?', 'no-thanks' ),
-			/* translators: {services} is replaced, keep it as is. */
-			'dnt'          => __( 'Your browser asks not to be tracked: {services} stays off.', 'no-thanks' ),
-			/* translators: {choice} and {date} are replaced, keep them as is. */
-			'state'        => __( 'Your choice: {choice}, on {date}.', 'no-thanks' ),
-			'accepted'     => __( 'accepted', 'no-thanks' ),
-			'refused'      => __( 'refused', 'no-thanks' ),
-			'refuse'       => __( 'No thanks', 'no-thanks' ),
-			'accept'       => __( 'OK', 'no-thanks' ),
-			'acceptAnyway' => __( 'Allow anyway', 'no-thanks' ),
-			'more'         => __( 'Learn more', 'no-thanks' ),
+			'message'      => $options['message'],
+			'dnt'          => $options['dnt'],
+			'refuse'       => $options['refuse'],
+			'accept'       => $options['accept'],
+			'acceptAnyway' => $options['accept_anyway'],
+			'accepted'     => $options['accepted'],
+			'refused'      => $options['refused'],
 		],
 	] );
 

@@ -27,5 +27,6 @@ Scripts that already ran cannot be unloaded: refusing after agreeing deletes the
 ## Plugin
 
 - Scripts are saved as is, only by a user with `unfiltered_html`.
-- `revision` = hash of services + scripts: changing them asks every visitor again.
+- Every text is set in Settings › No Thanks, none is built: the message (and the Do Not Track one) in a teeny TinyMCE (bold, italic, link; kept through `wp_kses`, paragraphs become `<br>`), the buttons, the reminders (`{date}`), the footer link. An empty field falls back to its translated default; the default message links to the privacy policy page.
+- `revision` = hash of message + scripts: changing them asks every visitor again.
 - CSS inlined (few hundred bytes), JS deferred; texts translated (`languages/`, fr_FR).

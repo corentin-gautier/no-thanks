@@ -9,9 +9,9 @@ An ultra-light consent banner: about 2 KB gzipped, no dependency, no cookie. Do 
 
 ## WordPress
 
-Install the plugin (composer: `cgsoft/no-thanks`), activate it, then fill Settings › No Thanks: the services named in the banner, their purpose, and the trackers' code as the service gives it. While the code is empty, nothing is loaded on the site.
+Install the plugin (composer: `cgsoft/no-thanks`), activate it, then fill Settings › No Thanks: the trackers' code as the service gives it, and every text of the banner (the message in a small visual editor with bold, italic and links; the buttons; the reminders; the footer link). Each text has a default in the site language. While the code is empty, nothing is loaded on the site.
 
-Footer link: `no_thanks_link()` prints a « Cookies » link while the banner is on; in a block footer, link to `#no-thanks`.
+Footer link: `no_thanks_link()` prints the footer link set in the settings while the banner is on; in a block footer, link to `#no-thanks`.
 
 Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`, `--no-thanks-accent`, `--no-thanks-accent-color`, `--no-thanks-radius`, `--no-thanks-shadow`, `--no-thanks-offset`. Filter `no_thanks_config` to change anything passed to the script.
 
@@ -20,7 +20,10 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 ```html
 <link rel="stylesheet" href="dist/no-thanks.css">
 <script>
-  window.noThanksConfig = { services: 'Google Analytics', privacyUrl: '/privacy', revision: '1' };
+  window.noThanksConfig = {
+    revision: '1',
+    texts: { message: 'This site would like to measure its audience with <b>Google Analytics</b>. Is that OK? <a href="/privacy">Learn more</a>' },
+  };
 </script>
 <script src="dist/no-thanks.js" defer></script>
 
@@ -31,7 +34,7 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 <a href="#no-thanks">Cookies</a>
 ```
 
-Options: `services`, `purpose`, `privacyUrl`, `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `buttonClass`, `texts` (see `src/no-thanks.js`).
+Options: `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `privacyUrl` (adds a « Learn more » link after the message), `buttonClass`, `texts`: `message` and `dnt` (HTML), `refuse`, `accept`, `acceptAnyway`, `accepted` and `refused` (`{date}` is replaced), `more`, `label` (the dialog's accessible name).
 
 API: `noThanks.open()`, `noThanks.consent`, `noThanks.set(true|false)`; event `no-thanks:change` on `document` (`detail.consent`).
 
