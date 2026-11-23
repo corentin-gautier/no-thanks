@@ -3,6 +3,6 @@
     "description": "An ultra-light consent banner: no dependency, no cookie, respects Do Not Track and Global Privacy Control.",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "require": {}
 }
