@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/corentin-gautier/no-thanks/compare/v0.1.3...v0.1.4) (2026-11-23)
+
+
+### Features
+
+* a lighter build without purposes, the plugin loads the one it needs ([27051b0](https://github.com/corentin-gautier/no-thanks/commit/27051b0e0979a84ac667d0648f86220c15ebe606))
+* choices by purpose, one switch each, in the banner and the settings ([89fdfe6](https://github.com/corentin-gautier/no-thanks/commit/89fdfe6bf39b2261e275bfdd7dc57c4ba5a3f4c4))
+* suggested privacy policy text, with the services found in the scripts ([3162e42](https://github.com/corentin-gautier/no-thanks/commit/3162e4213ad3ab49ad424fe52414d1392450f03f))
+
 ### [0.1.3](https://github.com/corentin-gautier/no-thanks/compare/v0.1.2...v0.1.3) (2026-11-23)
 
 

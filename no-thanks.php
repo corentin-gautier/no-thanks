@@ -2,7 +2,7 @@
 /**
  * Plugin Name: No Thanks
  * Description: An ultra-light consent banner: no dependency, no cookie, respects Do Not Track and Global Privacy Control.
- * Version: 0.1.3
+ * Version: 0.1.4
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: Corentin Gautier
@@ -13,7 +13,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NO_THANKS_VERSION', '0.1.3' );
+define( 'NO_THANKS_VERSION', '0.1.4' );
 
 require __DIR__ . '/lib/settings.php';
 require __DIR__ . '/lib/front.php';
