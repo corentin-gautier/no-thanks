@@ -1,6 +1,6 @@
 # No Thanks
 
-An ultra-light consent banner: about 2 KB gzipped, no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal.
+An ultra-light consent banner: about 2 KB gzipped, no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal; a short notice tells the visitor once, then fades out.
 
 - A small, non-blocking banner; « No thanks » and « OK » weigh the same.
 - Blocked code only runs once the visitor agrees.

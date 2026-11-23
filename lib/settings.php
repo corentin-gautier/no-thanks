@@ -142,7 +142,7 @@ function no_thanks_settings_page(): void {
 					<th scope="row"><?php esc_html_e( 'Message when the browser asks not to be tracked', 'no-thanks' ); ?></th>
 					<td>
 						<?php no_thanks_editor( 'dnt', $o['dnt'] ); ?>
-						<p class="description"><?php esc_html_e( 'Shown only from the footer link: such visitors get no banner and no tracker.', 'no-thanks' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link.', 'no-thanks' ); ?></p>
 					</td>
 				</tr>
 				<?php

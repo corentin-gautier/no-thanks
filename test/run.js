@@ -70,7 +70,12 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
 
   // Global Privacy Control
   page = await fresh(true);
-  check('GPC: no banner, nothing runs', await shown(page) === 0 && await runs(page) === '');
+  check('GPC: notice shown, nothing runs', await shown(page) === 1 && await runs(page) === '');
+  check('GPC: notice has no button', await page.locator('.no-thanks button').count() === 0);
+  await page.waitForTimeout(6500);
+  check('GPC: notice fades out', await shown(page) === 0);
+  await page.reload();
+  check('GPC: notice only once', await shown(page) === 0 && await runs(page) === '');
   await page.click('#settings');
   check('GPC: link explains', (await page.locator('.no-thanks__text').textContent()).includes('not to be tracked'));
   await page.getByRole('button', { name: 'Allow anyway' }).click();

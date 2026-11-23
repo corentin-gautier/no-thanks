@@ -4,7 +4,7 @@
  * Blocked content is written as `<template data-no-thanks>` (any HTML, scripts included)
  * or `<script type="text/plain" data-no-thanks>`; it only runs once the visitor agrees.
  * The choice is kept in localStorage (no cookie). Do Not Track and Global Privacy Control
- * count as a refusal. Any link to `#no-thanks` reopens the banner.
+ * count as a refusal (told once, in a short notice). Any link to `#no-thanks` reopens the banner.
  *
  * Config: `window.noThanksConfig = { privacyUrl, revision, maxAge, cookies, buttonClass, texts }`;
  * `texts.message` and `texts.dnt` are HTML (the site owner's own text).
@@ -12,6 +12,8 @@
  */
 (() => {
   const KEY = 'no-thanks';
+  const NOTICE = 'no-thanks-notice';
+  const NOTICE_TIME = 6000;
   const DAY = 864e5;
   const config = {
     privacyUrl: '',
@@ -24,7 +26,7 @@
   const texts = {
     label: 'Cookies and trackers',
     message: 'This site would like to measure its audience. Is that OK?',
-    dnt: 'Your browser asks not to be tracked: the trackers stay off.',
+    dnt: 'Your browser asks not to be tracked: noted, no tracker is on.',
     accepted: 'You agreed on {date}.',
     refused: 'You refused on {date}.',
     refuse: 'No thanks',
@@ -118,7 +120,7 @@
   };
 
   /** Shows the banner; `reopened` when asked for from a link (adds the current state; Escape closes it). */
-  const open = reopened => {
+  const open = (reopened, notice = false) => {
     dialog?.remove();
     const id = 'no-thanks-text';
     dialog = node('dialog', 'no-thanks', { ariaLabel: texts.label });
@@ -133,10 +135,12 @@
     }
     dialog.append(text);
 
-    const actions = node('div', 'no-thanks__actions');
-    if (signal) actions.append(button(texts.acceptAnyway, () => save(true)));
-    else actions.append(button(texts.refuse, () => save(false)), button(texts.accept, () => save(true)));
-    dialog.append(actions);
+    if (!notice) {
+      const actions = node('div', 'no-thanks__actions');
+      if (signal) actions.append(button(texts.acceptAnyway, () => save(true)));
+      else actions.append(button(texts.refuse, () => save(false)), button(texts.accept, () => save(true)));
+      dialog.append(actions);
+    }
 
     if (reopened) dialog.addEventListener('keydown', e => e.key === 'Escape' && close());
     document.body.append(dialog);
@@ -145,6 +149,30 @@
       dialog.show();
       dialog.querySelector('.no-thanks__actions button').focus();
     } else dialog.setAttribute('open', '');
+  };
+
+  /** Tells once that the browser's signal was heard, then fades out (paused while hovered or focused). */
+  const notify = () => {
+    try {
+      if (localStorage.getItem(NOTICE)) return;
+      localStorage.setItem(NOTICE, '1');
+    } catch (e) {}
+    open(false, true);
+    const own = dialog;
+    own.classList.add('no-thanks--notice');
+    own.setAttribute('role', 'status');
+    let timer;
+    const leave = () => {
+      own.classList.add('no-thanks--leaving');
+      setTimeout(() => own === dialog && close(), 300);
+    };
+    const wait = () => { clearTimeout(timer); timer = setTimeout(leave, NOTICE_TIME); };
+    const hold = () => { clearTimeout(timer); own.classList.remove('no-thanks--leaving'); };
+    own.addEventListener('pointerenter', hold);
+    own.addEventListener('focusin', hold);
+    own.addEventListener('pointerleave', wait);
+    own.addEventListener('focusout', wait);
+    wait();
   };
 
   document.addEventListener('click', e => {
@@ -163,7 +191,7 @@
 
   const start = () => {
     if (allowed()) run();
-    else if (!choice && !doNotTrack) open(false);
+    else if (!choice) doNotTrack ? notify() : open(false);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();

@@ -36,7 +36,7 @@ function no_thanks_defaults(): array {
 
 	return [
 		'message'       => $message,
-		'dnt'           => __( 'Your browser asks not to be tracked: the trackers stay off.', 'no-thanks' ),
+		'dnt'           => __( 'Your browser asks not to be tracked: noted, no tracker is on.', 'no-thanks' ),
 		'refuse'        => __( 'No thanks', 'no-thanks' ),
 		'accept'        => __( 'OK', 'no-thanks' ),
 		'accept_anyway' => __( 'Allow anyway', 'no-thanks' ),

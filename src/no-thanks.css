@@ -65,6 +65,14 @@
   white-space: nowrap;
 }
 
+:where(.no-thanks--notice) {
+  transition: opacity .3s;
+}
+
+:where(.no-thanks--leaving) {
+  opacity: 0;
+}
+
 @media print {
   :where(.no-thanks) { display: none; }
 }

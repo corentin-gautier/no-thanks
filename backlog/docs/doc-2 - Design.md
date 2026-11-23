@@ -14,7 +14,7 @@ type: guide
 
 ## Do Not Track
 
-`navigator.globalPrivacyControl` or `doNotTrack` = an implicit refusal: no banner, nothing runs. An explicit choice (footer link, « Allow anyway ») wins over the signal.
+`navigator.globalPrivacyControl` or `doNotTrack` = an implicit refusal: nothing runs, no banner. On the first visit only (`no-thanks-notice` in `localStorage`), the `dnt` message shows 6 s without buttons (`role=status`), paused while hovered or focused, then fades out. Third-party cookie blocking is not a signal: it cannot be read from the page and leaves first-party trackers working. An explicit choice (footer link, « Allow anyway ») wins over the signal.
 
 ## Blocked code
 

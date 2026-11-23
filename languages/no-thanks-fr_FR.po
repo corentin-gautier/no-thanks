@@ -74,8 +74,8 @@ msgstr "Scripts dans le head"
 msgid "Settings"
 msgstr "Réglages"
 
-msgid "Shown only from the footer link: such visitors get no banner and no tracker."
-msgstr "Affiché seulement depuis le lien de pied de page : ces visiteurs n’ont ni bandeau ni traceur."
+msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
+msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
 
 msgid "Shown when the banner is reopened; {date} is replaced by the date of the choice."
 msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la date du choix."
@@ -92,5 +92,5 @@ msgstr "Vous avez accepté le {date}."
 msgid "You refused on {date}."
 msgstr "Vous avez refusé le {date}."
 
-msgid "Your browser asks not to be tracked: the trackers stay off."
-msgstr "Votre navigateur demande à ne pas être suivi : les traceurs restent désactivés."
+msgid "Your browser asks not to be tracked: noted, no tracker is on."
+msgstr "Votre navigateur demande à ne pas être suivi : c’est noté, aucun traceur n’est activé."
