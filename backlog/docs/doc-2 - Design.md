@@ -6,7 +6,7 @@ type: guide
 
 ## Principles
 
-- Native first: `<dialog>` shown non-modal (no cookie wall), no library, about 3 KB gzipped (JS) + 1 KB (CSS).
+- Native first: `<dialog>` shown non-modal (no cookie wall), no library, about 2.5 KB gzipped (JS) + 0.8 KB (CSS); 2.9 + 1.2 KB with purposes.
 - Discreet: a small vertical card in a corner (340 px wide): a title with a cookie icon (`label`), the message with « Learn more » inline, then two buttons of equal weight side by side underneath. Unasked, it never takes the focus; reopened from a link, it does, and Escape closes it. Its buttons are its own, not the theme's (theme buttons are too big here); colours come from `--no-thanks-*`.
 - Corner button: once the banner is closed (a choice made, or after the Do Not Track notice), a 36 px round button in the same corner shows the state and reopens the banner (focus comes back to it on Escape). Cookie with a green check (`--no-thanks-ok`) when everything is allowed, an amber dash (`--no-thanks-some`) when some purposes are, crossed out otherwise; the text (`allowed` / `some` / `notAllowed`) slides out on hover or keyboard focus. Hidden while the banner is open, so never there while a first visit waits for an answer.
 - Nothing loaded while no tracker is set (plugin).
@@ -16,7 +16,7 @@ type: guide
 
 Choices are by purpose (audience, videos, ads…), never by cookie: that is what the CNIL asks, and a list of cookies only weighs the page and tires the visitor.
 
-- One purpose (the usual case): one choice, nothing more shown or loaded.
+- One purpose (the usual case): one choice, nothing more shown or loaded. Two builds from one source (`scripts/build.js`, esbuild `define`): `PURPOSES` false drops all purpose code (`no-thanks.js` / `.css`); `no-thanks-purposes.js` / `.css` keep it. The plugin loads the second only with two purposes or more.
 - Several (`purposes: [{ id, label, description }]`): « OK » and « No thanks » still decide everything in one click; « Choose » under them shows one switch per purpose (`role=switch`, all off). Reopened, the banner opens straight on the switches, set to the current choice, with its date (`chosen`).
 - Blocked code names its purpose: `data-no-thanks="videos"`; no value needs every purpose. Allowing one more runs its code at once; taking one back cleans the cookies and reloads.
 - Plugin: one block per purpose in Settings (name, description, head and end scripts); the empty block at the end adds one, emptying a block removes it. The id comes from the first name and stays. Settings from before purposes become one « Audience measurement » purpose.

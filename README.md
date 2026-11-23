@@ -1,6 +1,6 @@
 # No Thanks
 
-An ultra-light consent banner: about 3 KB gzipped, no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal; a short notice tells the visitor once, then fades out.
+An ultra-light consent banner: about 2.5 KB gzipped (3 KB with purposes), no dependency, no cookie. Do Not Track and Global Privacy Control count as a refusal; a short notice tells the visitor once, then fades out.
 
 - A small, non-blocking banner; « No thanks » and « OK » weigh the same.
 - Blocked code only runs once the visitor agrees.
@@ -19,6 +19,7 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 ## Any site
 
 ```html
+<!-- with several purposes: no-thanks-purposes.css and no-thanks-purposes.js -->
 <link rel="stylesheet" href="dist/no-thanks.css">
 <script>
   window.noThanksConfig = {
@@ -45,7 +46,7 @@ API: `noThanks.open()`, `noThanks.consent` (everything allowed), `noThanks.allow
 
 ```bash
 npm install
-npm run build   # dist/, prints the sizes
+npm run build   # dist/: the build without and with purposes, prints the sizes
 npm test        # headless Chromium checks, then the plugin's PHP (needs php)
 npm run demo    # every banner state side by side, on http://localhost:6480/
 npm run i18n    # refreshes and compiles the French translation (needs gettext)

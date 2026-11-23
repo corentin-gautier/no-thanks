@@ -12,7 +12,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "esbuild src/no-thanks.js src/no-thanks.css --minify --outdir=dist && node scripts/size.js",
+    "build": "node scripts/build.js",
     "test": "node test/run.js && php test/plugin.php",
     "demo": "node scripts/demo.js",
     "i18n": "scripts/i18n.sh",

@@ -64,12 +64,13 @@ $check('save: emptied block removed', count(no_thanks_sanitize($in2)['purposes']
 // Front config
 
 function plugin_dir_path($f) { return dirname(__DIR__) . '/'; }
-function plugins_url($p) { return '/' . $p; }
+function plugins_url($p) { $GLOBALS['script'] = $p; return '/' . $p; }
 function wp_register_style() {} function wp_add_inline_style() {} function wp_enqueue_style() {} function wp_enqueue_script() {}
 function wp_add_inline_script($h, $js) { $GLOBALS['inline'] = $js; }
 foreach ($GLOBALS['actions']['wp_enqueue_scripts'] as $f) $f();
 $cfg = json_decode(substr($GLOBALS['inline'], strlen('window.noThanksConfig = '), -1), true);
 $check('front: purposes without scripts', count($cfg['purposes']) === 2 && !isset($cfg['purposes'][0]['head']) && $cfg['purposes'][0]['description'] === 'Matomo');
+$check('front: the build with purposes', $GLOBALS['script'] === 'dist/no-thanks-purposes.js');
 $check('front: texts', $cfg['texts']['choose'] === 'Choose' && $cfg['texts']['some'] === 'Some cookies allowed');
 
 // Privacy text

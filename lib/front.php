@@ -13,12 +13,15 @@ add_action( 'wp_enqueue_scripts', function () {
 	$options = no_thanks_options();
 	$dir     = plugin_dir_path( __DIR__ ) . 'dist/';
 
-	// A few hundred bytes: inlined rather than one more request
+	// The build with purposes only when there is a choice to make between them
+	$build = count( $options['purposes'] ) > 1 ? 'no-thanks-purposes' : 'no-thanks';
+
+	// About 1 KB gzipped: inlined rather than one more request
 	wp_register_style( 'no-thanks', false, [], NO_THANKS_VERSION );
-	wp_add_inline_style( 'no-thanks', file_get_contents( $dir . 'no-thanks.css' ) );
+	wp_add_inline_style( 'no-thanks', file_get_contents( $dir . $build . '.css' ) );
 	wp_enqueue_style( 'no-thanks' );
 
-	wp_enqueue_script( 'no-thanks', plugins_url( 'dist/no-thanks.js', __DIR__ ), [], NO_THANKS_VERSION, [ 'strategy' => 'defer' ] );
+	wp_enqueue_script( 'no-thanks', plugins_url( "dist/$build.js", __DIR__ ), [], NO_THANKS_VERSION, [ 'strategy' => 'defer' ] );
 
 	$config = apply_filters( 'no_thanks_config', [
 		// New trackers, purposes or message ask the visitors again

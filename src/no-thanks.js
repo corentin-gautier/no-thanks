@@ -9,6 +9,9 @@
  * count as a refusal (told once, in a short notice). Once the banner is closed, a small cookie button
  * in the corner shows the state and reopens it; so does any link to `#no-thanks`.
  *
+ * Built twice (scripts/build.js): `PURPOSES` false leaves out everything about purposes (dist/no-thanks.js),
+ * true keeps it (dist/no-thanks-purposes.js).
+ *
  * Config: `window.noThanksConfig = { privacyUrl, revision, maxAge, cookies, buttonClass, purposes, texts }`,
  * set before this script runs; `purposes`: `[{ id, label, description }]`;
  * `texts.message` and `texts.dnt` are HTML (the site owner's own text).
@@ -33,20 +36,17 @@
     dnt: 'Your browser asks not to be tracked: noted, no tracker is on.',
     accepted: 'You agreed on {date}.',
     refused: 'You refused on {date}.',
-    chosen: 'Your choices of {date}.',
     refuse: 'No thanks',
     accept: 'OK',
     acceptAnyway: 'Allow anyway',
-    choose: 'Choose',
-    save: 'Save',
     more: 'Learn more',
     allowed: 'Cookies allowed',
-    some: 'Some cookies allowed',
     notAllowed: 'Cookies not allowed',
+    ...PURPOSES && { chosen: 'Your choices of {date}.', choose: 'Choose', save: 'Save', some: 'Some cookies allowed' },
     ...config.texts,
   };
   // Purpose by purpose only when there is a choice to make
-  const purposes = config.purposes.length > 1 ? config.purposes : [];
+  const purposes = PURPOSES && config.purposes.length > 1 ? config.purposes : [];
 
   const doNotTrack = navigator.globalPrivacyControl === true
     || [navigator.doNotTrack, window.doNotTrack].some(v => v === '1' || v === 'yes');
@@ -69,10 +69,10 @@
    * or `{ id: bool }` when chosen purpose by purpose. An explicit choice wins over the browser signal.
    */
   const granted = (c, id) => !!c && (typeof c.v !== 'object' ? c.v
-    : purposes.length > 0 && (id ? !!c.v[id] : purposes.every(p => c.v[p.id])));
+    : PURPOSES && purposes.length > 0 && (id ? !!c.v[id] : purposes.every(p => c.v[p.id])));
 
   /** 'on' (everything allowed), 'off' (nothing) or 'some'. */
-  const state = () => (granted(choice) ? 'on' : purposes.some(p => granted(choice, p.id)) ? 'some' : 'off');
+  const state = () => (granted(choice) ? 'on' : PURPOSES && purposes.some(p => granted(choice, p.id)) ? 'some' : 'off');
 
   /** Runs the blocked scripts and templates whose purpose is allowed, in document order. */
   const run = () => {
@@ -119,9 +119,9 @@
     try { localStorage.setItem(KEY, JSON.stringify(choice)); } catch (e) {}
     close();
     const detail = { consent: granted(choice) };
-    purposes.forEach(p => { (detail.purposes ||= {})[p.id] = granted(choice, p.id); });
+    if (PURPOSES) purposes.forEach(p => { (detail.purposes ||= {})[p.id] = granted(choice, p.id); });
     document.dispatchEvent(new CustomEvent('no-thanks:change', { detail }));
-    const ids = purposes.length ? purposes.map(p => p.id) : [''];
+    const ids = PURPOSES && purposes.length ? purposes.map(p => p.id) : [''];
     if (ids.some(id => granted(old, id) && !granted(choice, id))) { clean(); location.reload(); }
     else run();
   };
@@ -137,7 +137,7 @@
   const badge = (state, mark) => `${COOKIE}<circle class="no-thanks-toggle__badge no-thanks-toggle__badge--${state}" cx="18.5" cy="18.5" r="5.5"/><path d="${mark}" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
   const ICONS = {
     on: badge('on', 'm16 18.6 1.7 1.7 3-3.2'),
-    some: badge('some', 'M16.2 18.5h4.6'),
+    ...PURPOSES && { some: badge('some', 'M16.2 18.5h4.6') },
     off: `<g opacity=".55">${COOKIE}</g><path d="m3.5 3.5 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
   };
 
@@ -169,7 +169,7 @@
    * Shows the banner. `reopened`: asked for from a link or the corner button (adds the current state; Escape
    * closes it). `notice`: no button. `details`: one switch per purpose (always when reopened with purposes).
    */
-  const open = (reopened, notice = false, details = reopened && purposes.length > 0) => {
+  const open = (reopened, notice = false, details = PURPOSES && reopened && purposes.length > 0) => {
     dialog?.remove();
     if (toggle) toggle.hidden = true;
     const id = 'no-thanks-text';
@@ -196,7 +196,7 @@
     dialog.append(text);
 
     let switches = [];
-    if (details) {
+    if (PURPOSES && details) {
       const list = node('div', 'no-thanks__purposes', { role: 'group' });
       list.setAttribute('aria-labelledby', 'no-thanks-title');
       switches = purposes.map(p => {
@@ -213,7 +213,7 @@
 
     if (!notice) {
       const actions = node('div', 'no-thanks__actions');
-      if (details) {
+      if (PURPOSES && details) {
         actions.append(button(texts.refuse, () => save(false)), button(texts.save, () => {
           const v = Object.fromEntries(switches.map(([key, input]) => [key, input.checked]));
           save(Object.values(v).every(Boolean) || (Object.values(v).some(Boolean) ? v : false));
@@ -221,7 +221,7 @@
       } else if (signal) actions.append(button(texts.acceptAnyway, () => save(true)));
       else actions.append(button(texts.refuse, () => save(false)), button(texts.accept, () => save(true)));
       dialog.append(actions);
-      if (purposes.length && !details) {
+      if (PURPOSES && purposes.length && !details) {
         dialog.append(node('button', 'no-thanks__choose', {
           type: 'button', textContent: texts.choose,
           onclick: () => { open(reopened, false, true); dialog.querySelector('input').focus(); },

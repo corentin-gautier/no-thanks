@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>No Thanks state</title>
-  <link rel="stylesheet" href="/dist/no-thanks.css">
   <style>
     body { margin: 0; min-height: 100vh; font: 15px/1.5 system-ui, sans-serif; background: #fbfaf7; color: #1d1d1b; }
     header { padding: 14px 20px; font-weight: 700; }
@@ -69,7 +68,11 @@
     ]) : [];
     window.noThanksConfig = { privacyUrl: state === 'no-link' ? '' : '#privacy', purposes, texts };
   </script>
-  <script src="/dist/no-thanks.js" defer></script>
+  <script>
+    // The build with purposes only where they are used, as the plugin does
+    const build = multi ? 'no-thanks-purposes' : 'no-thanks';
+    document.write(`<link rel="stylesheet" href="/dist/${build}.css"><script src="/dist/${build}.js" defer><\/script>`);
+  </script>
 </head>
 <body>
   <header>Example site</header>
