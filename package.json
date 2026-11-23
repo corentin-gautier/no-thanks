@@ -1,10 +1,29 @@
 {
-  "name": "no-thanks",
+  "name": "no-thanks.js",
   "version": "0.1.4",
   "description": "An ultra-light consent banner: no dependency, no cookie, respects Do Not Track and Global Privacy Control.",
+  "keywords": [
+    "consent",
+    "cookie",
+    "banner",
+    "gdpr",
+    "rgpd",
+    "cmp",
+    "privacy",
+    "do-not-track",
+    "gpc"
+  ],
+  "homepage": "https://github.com/corentin-gautier/no-thanks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corentin-gautier/no-thanks.git"
+  },
+  "bugs": "https://github.com/corentin-gautier/no-thanks/issues",
   "license": "GPL-3.0-or-later",
   "author": "Corentin Gautier",
   "main": "dist/no-thanks.js",
+  "unpkg": "dist/no-thanks.js",
+  "jsdelivr": "dist/no-thanks.js",
   "files": [
     "dist",
     "src",
@@ -17,7 +36,7 @@
     "demo": "node scripts/demo.js",
     "i18n": "scripts/i18n.sh",
     "cmp-sizes": "node scripts/cmp-sizes.js",
-    "release": "npm run build && npm test && npx --yes standard-version && git push --follow-tags origin main && gh workflow run build -R corentin-gautier/composer-repo"
+    "release": "npm run build && npm test && npx --yes standard-version && git push --follow-tags origin main && npm publish && gh workflow run build -R corentin-gautier/composer-repo"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

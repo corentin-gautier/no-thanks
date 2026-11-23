@@ -38,6 +38,8 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 
 ## Any site
 
+`npm install no-thanks.js` (files in `node_modules/no-thanks.js/dist/`), or from a CDN: `https://cdn.jsdelivr.net/npm/no-thanks.js/dist/no-thanks.js` (and `.css`).
+
 ```html
 <!-- with several purposes: no-thanks-purposes.css and no-thanks-purposes.js -->
 <link rel="stylesheet" href="dist/no-thanks.css">
@@ -74,4 +76,4 @@ npm run i18n    # refreshes and compiles the French translation (needs gettext)
 
 `dist/` is committed: the plugin uses it as is.
 
-Release: `npm run release` (build, tests, `standard-version` bumps the plugin header, `NO_THANKS_VERSION`, `composer.json` and `package.json`, tags, pushes, then rebuilds the [Composer repository](https://github.com/corentin-gautier/composer-repo)). Dev files are left out of the installed plugin by `.gitattributes`.
+Release: `npm run release` (build, tests, `standard-version` bumps the plugin header, `NO_THANKS_VERSION`, `composer.json` and `package.json`, tags, pushes, publishes `no-thanks.js` on npm, then rebuilds the [Composer repository](https://github.com/corentin-gautier/composer-repo)). Dev files are left out of the installed plugin by `.gitattributes`.
