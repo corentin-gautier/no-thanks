@@ -1,9 +1,10 @@
 ---
 id: TASK-1
 title: 'Consent banner: JS library and WordPress plugin'
-status: In Progress
+status: Done
 assignee: []
 created_date: '2026-11-23T07:20:53Z'
+updated_date: '2026-11-23T22:56:32Z'
 labels: []
 dependencies: []
 ordinal: 1000

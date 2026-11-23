@@ -8,6 +8,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: no-thanks\n"
 
+#, php-format
+msgid "%1$s: [what it is used for]. Its cookies are kept [how long]. Its privacy policy: %2$s"
+msgstr "%1$s : [à quoi il sert]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : %2$s"
+
 msgid "A consent banner for the trackers this site uses. Leave the scripts empty and nothing is loaded."
 msgstr "Un bandeau de consentement pour les traceurs du site. Laissez les scripts vides et rien n’est chargé."
 
@@ -59,6 +63,9 @@ msgstr "Message quand le navigateur demande à ne pas être suivi"
 msgid "Name the services and what they are for. Changing it asks every visitor again."
 msgstr "Nommez les services et leur usage. Le modifier redemande l’accord de tous les visiteurs."
 
+msgid "No Thanks only lets the scripts set in its settings run once the visitor agrees. Complete the list of services: what each one is for and how long its cookies last."
+msgstr "No Thanks ne laisse s’exécuter les scripts de ses réglages qu’après l’accord du visiteur. Complétez la liste des services : à quoi sert chacun et combien de temps durent ses cookies."
+
 msgid "No thanks"
 msgstr "Non merci"
 
@@ -86,6 +93,9 @@ msgstr "Scripts en fin de page"
 msgid "Scripts in the head"
 msgstr "Scripts dans le head"
 
+msgid "Services that may set trackers on this site:"
+msgstr "Services pouvant déposer des traceurs sur ce site :"
+
 msgid "Settings"
 msgstr "Réglages"
 
@@ -94,6 +104,12 @@ msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la dat
 
 msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
 msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
+
+msgid "Suggested text:"
+msgstr "Texte suggéré :"
+
+msgid "This site only uses trackers (cookies and similar technologies) with your consent: none is set before you answer, and refusing is as easy as accepting."
+msgstr "Ce site n’utilise des traceurs (cookies et technologies similaires) qu’avec votre accord : aucun n’est déposé avant votre réponse, et refuser est aussi simple qu’accepter."
 
 msgid "This site would like to measure its audience. Is that OK?"
 msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
@@ -107,8 +123,17 @@ msgstr "Traceurs"
 msgid "You agreed on {date}."
 msgstr "Vous avez accepté le {date}."
 
+msgid "You can change your mind at any time with the cookie button in the corner of each page. When you withdraw your consent, the trackers’ cookies are deleted."
+msgstr "Vous pouvez changer d’avis à tout moment avec le bouton cookie dans l’angle de chaque page. Quand vous retirez votre accord, les cookies des traceurs sont supprimés."
+
 msgid "You refused on {date}."
 msgstr "Vous avez refusé le {date}."
 
+msgid "Your answer is kept in your browser for 6 months (in its local storage, not in a cookie); we then ask again. If your browser asks not to be tracked (Do Not Track or Global Privacy Control), we take it as a refusal."
+msgstr "Votre réponse est conservée 6 mois dans votre navigateur (dans son stockage local, pas dans un cookie) ; nous vous la redemandons ensuite. Si votre navigateur demande à ne pas être suivi (Do Not Track ou Global Privacy Control), nous le prenons comme un refus."
+
 msgid "Your browser asks not to be tracked: noted, no tracker is on."
 msgstr "Votre navigateur demande à ne pas être suivi : c’est noté, aucun traceur n’est activé."
+
+msgid "[Service] ([provider]): [what it is used for]. Its cookies are kept [how long]. Its privacy policy: [link]"
+msgstr "[Service] ([éditeur]) : [à quoi il sert]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : [lien]"

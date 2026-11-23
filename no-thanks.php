@@ -17,6 +17,7 @@ define( 'NO_THANKS_VERSION', '0.1.3' );
 
 require __DIR__ . '/lib/settings.php';
 require __DIR__ . '/lib/front.php';
+require __DIR__ . '/lib/privacy.php';
 
 add_action( 'init', function () {
 	load_plugin_textdomain( 'no-thanks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
