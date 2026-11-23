@@ -44,6 +44,7 @@ API: `noThanks.open()`, `noThanks.consent`, `noThanks.set(true|false)`; event `n
 npm install
 npm run build   # dist/, prints the sizes
 npm test        # headless Chromium checks
+npm run demo    # every banner state side by side, on http://localhost:6480/
 ```
 
 `dist/` is committed: the plugin uses it as is.

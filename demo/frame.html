@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Thanks state</title>
+  <link rel="stylesheet" href="/dist/no-thanks.css">
+  <style>
+    body { margin: 0; min-height: 100vh; font: 15px/1.5 system-ui, sans-serif; background: #fbfaf7; color: #1d1d1b; }
+    header { padding: 14px 20px; font-weight: 700; }
+    main { margin: 0 20px; padding: 24px; border-radius: 8px; background: #efe9df; }
+    main i { display: block; height: 9px; margin: 8px 0; border-radius: 4px; background: #d8d0c2; }
+    footer { padding: 12px 20px; font-size: 13px; }
+    body.dark { background: #16181d; color: #e8e8e8; }
+    body.dark main { background: #23262e; }
+    body.dark main i { background: #343844; }
+    body.dark .no-thanks { --no-thanks-bg: #2b2f38; --no-thanks-color: #f1f1f1; --no-thanks-accent: #f5b942; --no-thanks-accent-color: #1d1d1b; --no-thanks-radius: 14px; }
+    body.dark footer a { color: #f5b942; }
+  </style>
+  <script>
+    // Each frame plays one state: its own in-memory storage, its own browser signal
+    const q = new URLSearchParams(location.search);
+    const state = q.get('state');
+    const fr = q.get('lang') === 'fr';
+    const day = 864e5;
+    const store = {};
+    const choice = { accepted: true, refused: false, 'dnt-accepted': true, 'dnt-refused': false }[state];
+    if (choice !== undefined) store['no-thanks'] = JSON.stringify({ v: choice, t: Date.now() - 3 * day, r: '' });
+    if (state === 'dnt-reopened') store['no-thanks-notice'] = '1';
+    Object.defineProperty(window, 'localStorage', { value: {
+      getItem: k => (k in store ? store[k] : null),
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: k => { delete store[k]; },
+    } });
+    if (state.startsWith('notice') || state.startsWith('dnt')) Object.defineProperty(navigator, 'globalPrivacyControl', { get: () => true });
+    document.documentElement.lang = fr ? 'fr' : 'en';
+
+    const texts = fr ? {
+      label: 'Cookies et traceurs',
+      message: 'Ce site aimerait mesurer son audience. Vous êtes d’accord ?',
+      dnt: 'Votre navigateur demande à ne pas être suivi : c’est noté, aucun traceur n’est activé.',
+      accepted: 'Vous avez accepté le {date}.',
+      refused: 'Vous avez refusé le {date}.',
+      refuse: 'Non merci',
+      accept: 'D’accord',
+      acceptAnyway: 'L’autoriser quand même',
+      more: 'En savoir plus',
+    } : {};
+    if (state === 'long') texts.message = fr
+      ? 'Ce site utilise <strong>Matomo</strong> pour mesurer son audience et <strong>YouTube</strong> pour afficher des vidéos. Ces services peuvent déposer des traceurs sur votre appareil. Vous êtes d’accord ?'
+      : 'This site uses <strong>Matomo</strong> to measure its audience and <strong>YouTube</strong> to show videos. These services may set trackers on your device. Is that OK?';
+    window.noThanksConfig = { privacyUrl: state === 'no-link' ? '' : '#privacy', texts };
+  </script>
+  <script src="/dist/no-thanks.js" defer></script>
+</head>
+<body>
+  <header>Example site</header>
+  <main><i style="width:70%"></i><i style="width:55%"></i><i style="width:62%"></i></main>
+  <footer><a id="settings" href="#no-thanks">Cookies</a></footer>
+  <script>
+    if (state === 'dark') document.body.classList.add('dark');
+    addEventListener('DOMContentLoaded', () => {
+      // Reopened states: as if the visitor clicked the footer link
+      if (/accepted|refused|reopened/.test(state)) {
+        const y = parent.scrollY;
+        noThanks.open();
+        parent.scrollTo(0, y);
+      }
+      // Notice: held on screen unless the live fade is asked for
+      if (state === 'notice') document.querySelector('.no-thanks')?.dispatchEvent(new Event('pointerenter'));
+    });
+  </script>
+</body>
+</html>

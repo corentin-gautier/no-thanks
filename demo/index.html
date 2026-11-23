@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>No Thanks — every banner state</title>
+  <style>
+    body { margin: 0; padding: 24px 32px 48px; font: 14px/1.5 system-ui, sans-serif; background: #e9e7e3; color: #1d1d1b; }
+    h1 { margin: 0 0 4px; font-size: 1.4rem; }
+    .bar { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin: 12px 0 24px; }
+    .bar label { display: flex; gap: 6px; align-items: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--w), 1fr)); gap: 28px; }
+    figure { margin: 0; }
+    figcaption { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-weight: 600; }
+    figcaption small { display: block; font-weight: 400; color: #555; }
+    figcaption button { align-self: start; font: inherit; font-size: 12px; cursor: pointer; }
+    iframe { display: block; width: var(--w); max-width: 100%; height: var(--h, 300px); border: 0; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px #0002; }
+  </style>
+</head>
+<body>
+  <h1>No Thanks — every banner state</h1>
+  <p>Each frame plays one state with its own storage and browser signal; nothing is saved. Uses <code>dist/</code>: run <code>npm run build</code> after a change.</p>
+  <div class="bar">
+    <label>Width <select id="width"><option value="720">Desktop (720px)</option><option value="375">Mobile (375px)</option></select></label>
+    <label>Language <select id="lang"><option value="en">English</option><option value="fr">Français</option></select></label>
+    <button id="reload">Reload all</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <script>
+    const states = [
+      ['first', 'First visit', 'No choice yet: message, privacy link, two buttons. Focus left alone.'],
+      ['no-link', 'First visit, no privacy link', 'privacyUrl left empty.'],
+      ['long', 'Long message', 'HTML message from the settings, wrapping over several lines.'],
+      ['accepted', 'Reopened after accepting', 'From the footer link: shows the date of the choice; Escape closes.'],
+      ['refused', 'Reopened after refusing', 'Same, after a refusal.'],
+      ['notice', 'Do Not Track / GPC notice', 'First visit with the signal: no button. Held here; see the live one for the fade.'],
+      ['notice-live', 'Do Not Track notice, live', 'Fades out after 6 s (paused while hovered or focused).'],
+      ['dnt-reopened', 'Do Not Track, reopened', 'Signal on, no choice: one button to allow anyway.'],
+      ['dnt-accepted', 'Do Not Track, allowed anyway', 'An explicit choice wins over the signal: regular banner with the date.'],
+      ['dnt-refused', 'Do Not Track, refused', 'Refused from the regular banner while the signal was on.'],
+      ['dark', 'Themed', 'Custom properties: --no-thanks-bg, -color, -accent, -accent-color, -radius.'],
+    ];
+    const grid = document.getElementById('grid');
+    const width = document.getElementById('width');
+    const lang = document.getElementById('lang');
+    const src = s => `/demo/frame.html?state=${s}&lang=${lang.value}`;
+    grid.innerHTML = states.map(([s, title, note]) => `
+      <figure>
+        <figcaption><span>${title}<small>${note}</small></span><button data-s="${s}">Replay</button></figcaption>
+        <iframe id="f-${s}" title="${title}" src="${src(s)}"></iframe>
+      </figure>`).join('');
+    const reload = () => states.forEach(([s]) => { document.getElementById(`f-${s}`).src = src(s); });
+    const resize = () => { document.body.style.setProperty("--w", `${width.value}px`); document.body.style.setProperty("--h", width.value < 500 ? "380px" : "300px"); };
+    grid.addEventListener('click', e => { const s = e.target.dataset.s; if (s) document.getElementById(`f-${s}`).src = src(s); });
+    width.onchange = resize;
+    lang.onchange = reload;
+    document.getElementById('reload').onclick = reload;
+    resize();
+  </script>
+</body>
+</html>
