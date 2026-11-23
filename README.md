@@ -76,4 +76,4 @@ npm run i18n    # refreshes and compiles the French translation (needs gettext)
 
 `dist/` is committed: the plugin uses it as is.
 
-Release: `npm run release` (build, tests, `standard-version` bumps the plugin header, `NO_THANKS_VERSION`, `composer.json` and `package.json`, tags, pushes, publishes `no-thanks.js` on npm, then rebuilds the [Composer repository](https://github.com/corentin-gautier/composer-repo)). Dev files are left out of the installed plugin by `.gitattributes`.
+Release: `npm run release` (build, tests, `standard-version` bumps the plugin header, `NO_THANKS_VERSION`, `composer.json` and `package.json`, tags, pushes (the tag makes GitHub publish `no-thanks.js` on npm, `.github/workflows/publish.yml`), then rebuilds the [Composer repository](https://github.com/corentin-gautier/composer-repo)). Dev files are left out of the installed plugin by `.gitattributes`.

@@ -1,0 +1,25 @@
+name: publish
+
+# Publishes no-thanks.js on npm when a version tag is pushed (npm run release).
+# Auth: npm trusted publishing (OIDC), no token stored in the repo.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - run: npm publish --provenance --access public

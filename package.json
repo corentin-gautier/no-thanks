@@ -36,7 +36,7 @@
     "demo": "node scripts/demo.js",
     "i18n": "scripts/i18n.sh",
     "cmp-sizes": "node scripts/cmp-sizes.js",
-    "release": "npm run build && npm test && npx --yes standard-version && git push --follow-tags origin main && npm publish && gh workflow run build -R corentin-gautier/composer-repo"
+    "release": "npm run build && npm test && npx --yes standard-version && git push --follow-tags origin main && gh workflow run build -R corentin-gautier/composer-repo"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
