@@ -13,7 +13,7 @@
     figcaption { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-weight: 600; }
     figcaption small { display: block; font-weight: 400; color: #555; }
     figcaption button { align-self: start; font: inherit; font-size: 12px; cursor: pointer; }
-    iframe { display: block; width: var(--w); max-width: 100%; height: var(--h, 300px); border: 0; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px #0002; }
+    iframe { display: block; width: var(--w); max-width: 100%; height: var(--h, 340px); border: 0; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px #0002; }
   </style>
 </head>
 <body>
@@ -53,7 +53,7 @@
         <iframe id="f-${s}" title="${title}" src="${src(s)}"></iframe>
       </figure>`).join('');
     const reload = () => states.forEach(([s]) => { document.getElementById(`f-${s}`).src = src(s); });
-    const resize = () => { document.body.style.setProperty("--w", `${width.value}px`); document.body.style.setProperty("--h", width.value < 500 ? "380px" : "300px"); };
+    const resize = () => { document.body.style.setProperty("--w", `${width.value}px`); document.body.style.setProperty("--h", width.value < 500 ? "400px" : "340px"); };
     grid.addEventListener('click', e => { const s = e.target.dataset.s; if (s) document.getElementById(`f-${s}`).src = src(s); });
     width.onchange = resize;
     lang.onchange = reload;

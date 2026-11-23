@@ -7,7 +7,7 @@ type: guide
 ## Principles
 
 - Native first: `<dialog>` shown non-modal (no cookie wall), no library, about 2 KB gzipped.
-- Discreet: a compact strip in a corner (about 540 × 56 px on desktop), one sentence with « Learn more » inline, two small buttons of equal weight. Unasked, it never takes the focus; reopened from a link, it does, and Escape closes it. Its buttons are its own, not the theme's (theme buttons are too big here); colours come from `--no-thanks-*`.
+- Discreet: a small vertical card in a corner (340 px wide), the message with « Learn more » inline, then two buttons of equal weight side by side underneath. Unasked, it never takes the focus; reopened from a link, it does, and Escape closes it. Its buttons are its own, not the theme's (theme buttons are too big here); colours come from `--no-thanks-*`.
 - Corner button: once the banner is closed (a choice made, or after the Do Not Track notice), a 36 px round button in the same corner shows the state and reopens the banner (focus comes back to it on Escape). Cookie with a green check (`--no-thanks-ok`) when allowed, crossed-out cookie otherwise; the text (`allowed` / `notAllowed`) slides out on hover or keyboard focus. Hidden while the banner is open, so never there while a first visit waits for an answer.
 - Nothing loaded while no tracker is set (plugin).
 - No cookie: the choice is in `localStorage` (`no-thanks`: `{ v, t, r }` = choice, time, revision), kept `maxAge` days.

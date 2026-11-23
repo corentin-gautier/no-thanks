@@ -1,25 +1,23 @@
-/* No Thanks — a compact strip; every rule is in :where() so the site's own styles win. */
+/* No Thanks — a small card in a corner, buttons under the text; every rule is in :where() so the site's own styles win. */
 :where(.no-thanks) {
   position: fixed;
   inset: auto auto var(--no-thanks-offset, 12px) var(--no-thanks-offset, 12px);
   z-index: 2147483000;
   box-sizing: border-box;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  align-items: center;
-  width: auto;
-  max-width: min(540px, calc(100vw - 2 * var(--no-thanks-offset, 12px)));
+  flex-direction: column;
+  gap: 14px;
+  width: min(340px, calc(100vw - 2 * var(--no-thanks-offset, 12px)));
   margin: 0;
-  padding: 8px 8px 8px 14px;
+  padding: 18px 20px 20px;
   border: 0;
   border-radius: var(--no-thanks-radius, 8px);
   background: var(--no-thanks-bg, #fff);
   color: var(--no-thanks-color, #1d1d1b);
   box-shadow: var(--no-thanks-shadow, 0 2px 12px rgb(0 0 0 / .15));
   font: inherit;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 :where(.no-thanks:not([open])) {
@@ -28,23 +26,24 @@
 
 /* Not in :where(): the site's paragraph margins would open a gap */
 .no-thanks .no-thanks__text {
-  flex: 1 1 220px;
   margin: 0;
 }
 
 :where(.no-thanks__state) {
   display: block;
+  margin-top: 8px;
+  font-size: 13px;
   opacity: .75;
 }
 
 :where(.no-thanks__actions) {
   display: flex;
-  gap: 6px;
-  margin-left: auto;
+  gap: 8px;
 }
 
 :where(.no-thanks__button) {
-  min-height: 32px;
+  flex: 1;
+  min-height: 38px;
   padding: 0 12px;
   border: 0;
   border-radius: var(--no-thanks-radius, 8px);
