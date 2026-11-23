@@ -1,0 +1,22 @@
+{
+  "name": "no-thanks",
+  "version": "0.1.0",
+  "description": "An ultra-light consent banner: no dependency, no cookie, respects Do Not Track and Global Privacy Control.",
+  "license": "GPL-3.0-or-later",
+  "author": "Corentin Gautier",
+  "main": "dist/no-thanks.js",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "esbuild src/no-thanks.js src/no-thanks.css --minify --outdir=dist && node scripts/size.js",
+    "test": "node test/run.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "1.55"
+  }
+}

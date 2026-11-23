@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>No Thanks test page</title>
+  <link rel="stylesheet" href="/dist/no-thanks.css">
+  <script>
+    window.noThanksConfig = {
+      services: 'Google Analytics',
+      privacyUrl: '/privacy',
+      revision: new URLSearchParams(location.search).get('r') || '1',
+    };
+    window.runs = [];
+  </script>
+  <script src="/dist/no-thanks.js" defer></script>
+  <template data-no-thanks>
+    <script>runs.push('template'); document.cookie = '_ga=GA1.1; path=/';</script>
+    <div id="pixel"><script>runs.push('nested')</script></div>
+  </template>
+</head>
+<body>
+  <h1>Test page</h1>
+  <script type="text/plain" data-no-thanks>runs.push('plain')</script>
+  <footer><a id="settings" href="#no-thanks">Cookies</a></footer>
+</body>
+</html>
