@@ -1,0 +1,8 @@
+{
+    "bumpFiles": [
+        { "filename": "no-thanks.php", "updater": "scripts/version-updater.js" },
+        { "filename": "composer.json", "type": "json" },
+        { "filename": "package.json", "type": "json" },
+        { "filename": "package-lock.json", "type": "json" }
+    ]
+}

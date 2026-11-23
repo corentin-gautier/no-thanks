@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "esbuild src/no-thanks.js src/no-thanks.css --minify --outdir=dist && node scripts/size.js",
-    "test": "node test/run.js"
+    "test": "node test/run.js",
+    "release": "npm run build && npm test && npx --yes standard-version && git push --follow-tags origin main && gh workflow run build -R corentin-gautier/composer-repo"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

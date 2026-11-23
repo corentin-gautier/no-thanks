@@ -9,7 +9,7 @@ An ultra-light consent banner: about 2 KB gzipped, no dependency, no cookie. Do 
 
 ## WordPress
 
-Install the plugin (composer: `cgsoft/no-thanks`), activate it, then fill Settings › No Thanks: the trackers' code as the service gives it, and every text of the banner (the message in a small visual editor with bold, italic and links; the buttons; the reminders; the footer link). Each text has a default in the site language. While the code is empty, nothing is loaded on the site.
+Install the plugin with composer (`cgsoft/no-thanks`, from the repository `https://corentingautier.dev/composer-repo`), activate it, then fill Settings › No Thanks: the trackers' code as the service gives it, and every text of the banner (the message in a small visual editor with bold, italic and links; the buttons; the reminders; the footer link). Each text has a default in the site language. While the code is empty, nothing is loaded on the site.
 
 Footer link: `no_thanks_link()` prints the footer link set in the settings while the banner is on; in a block footer, link to `#no-thanks`.
 
@@ -47,3 +47,5 @@ npm test        # headless Chromium checks
 ```
 
 `dist/` is committed: the plugin uses it as is.
+
+Release: `npm run release` (build, tests, `standard-version` bumps the plugin header, `NO_THANKS_VERSION`, `composer.json` and `package.json`, tags, pushes, then rebuilds the [Composer repository](https://github.com/corentin-gautier/composer-repo)). Dev files are left out of the installed plugin by `.gitattributes`.
