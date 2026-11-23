@@ -13,6 +13,7 @@
     footer { padding: 12px 20px; font-size: 13px; }
     body.dark { background: #16181d; color: #e8e8e8; }
     body.dark main { background: #23262e; }
+    .hover .no-thanks-toggle__text { max-width: 220px; padding: 0 4px 0 6px; }
     body.dark main i { background: #343844; }
     body.dark .no-thanks { --no-thanks-bg: #2b2f38; --no-thanks-color: #f1f1f1; --no-thanks-accent: #f5b942; --no-thanks-accent-color: #1d1d1b; --no-thanks-radius: 14px; }
     body.dark footer a { color: #f5b942; }
@@ -24,15 +25,15 @@
     const fr = q.get('lang') === 'fr';
     const day = 864e5;
     const store = {};
-    const choice = { accepted: true, refused: false, 'dnt-accepted': true, 'dnt-refused': false }[state];
+    const choice = { accepted: true, refused: false, 'dnt-accepted': true, 'dnt-refused': false, 'button-on': true, 'button-off': false, 'button-hover': true }[state];
     if (choice !== undefined) store['no-thanks'] = JSON.stringify({ v: choice, t: Date.now() - 3 * day, r: '' });
-    if (state === 'dnt-reopened') store['no-thanks-notice'] = '1';
+    if (state === 'dnt-reopened' || state === 'button-dnt') store['no-thanks-notice'] = '1';
     Object.defineProperty(window, 'localStorage', { value: {
       getItem: k => (k in store ? store[k] : null),
       setItem: (k, v) => { store[k] = String(v); },
       removeItem: k => { delete store[k]; },
     } });
-    if (state.startsWith('notice') || state.startsWith('dnt')) Object.defineProperty(navigator, 'globalPrivacyControl', { get: () => true });
+    if (/^(notice|dnt)|button-dnt/.test(state)) Object.defineProperty(navigator, 'globalPrivacyControl', { get: () => true });
     document.documentElement.lang = fr ? 'fr' : 'en';
 
     const texts = fr ? {
@@ -59,6 +60,7 @@
   <footer><a id="settings" href="#no-thanks">Cookies</a></footer>
   <script>
     if (state === 'dark') document.body.classList.add('dark');
+    if (state === 'button-hover') document.body.classList.add('hover');
     addEventListener('DOMContentLoaded', () => {
       // Reopened states: as if the visitor clicked the footer link
       if (/accepted|refused|reopened/.test(state)) {

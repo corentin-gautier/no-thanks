@@ -45,6 +45,8 @@ function no_thanks_defaults(): array {
 		/* translators: {date} is replaced, keep it as is. */
 		'refused'       => __( 'You refused on {date}.', 'no-thanks' ),
 		'link'          => __( 'Cookies', 'no-thanks' ),
+		'allowed'       => __( 'Cookies allowed', 'no-thanks' ),
+		'not_allowed'   => __( 'Cookies not allowed', 'no-thanks' ),
 	];
 }
 

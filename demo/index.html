@@ -18,7 +18,7 @@
 </head>
 <body>
   <h1>No Thanks — every banner state</h1>
-  <p>Each frame plays one state with its own storage and browser signal; nothing is saved. Uses <code>dist/</code>: run <code>npm run build</code> after a change.</p>
+  <p>Each frame plays one state with its own storage and browser signal; nothing is saved. Hover the corner buttons to see their text. Uses <code>dist/</code>: run <code>npm run build</code> after a change.</p>
   <div class="bar">
     <label>Width <select id="width"><option value="720">Desktop (720px)</option><option value="375">Mobile (375px)</option></select></label>
     <label>Language <select id="lang"><option value="en">English</option><option value="fr">Français</option></select></label>
@@ -30,6 +30,10 @@
       ['first', 'First visit', 'No choice yet: message, privacy link, two buttons. Focus left alone.'],
       ['no-link', 'First visit, no privacy link', 'privacyUrl left empty.'],
       ['long', 'Long message', 'HTML message from the settings, wrapping over several lines.'],
+      ['button-on', 'Corner button, allowed', 'Once the banner is closed: a click reopens it.'],
+      ['button-off', 'Corner button, refused', 'Crossed-out cookie.'],
+      ['button-dnt', 'Corner button, Do Not Track', 'After the notice: not allowed, no choice made.'],
+      ['button-hover', 'Corner button, hovered or focused', 'The state slides out (held open here).'],
       ['accepted', 'Reopened after accepting', 'From the footer link: shows the date of the choice; Escape closes.'],
       ['refused', 'Reopened after refusing', 'Same, after a refusal.'],
       ['notice', 'Do Not Track / GPC notice', 'First visit with the signal: no button. Held here; see the live one for the fade.'],

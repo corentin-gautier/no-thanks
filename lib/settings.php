@@ -60,7 +60,7 @@ function no_thanks_sanitize( $input ): array {
 		$html          = preg_replace( '#</p>\s*<p[^>]*>#i', '<br>', $input[ $key ] ?? '' );
 		$clean[ $key ] = trim( wp_kses( $html, $inline ) );
 	}
-	foreach ( [ 'refuse', 'accept', 'accept_anyway', 'accepted', 'refused', 'link' ] as $key ) {
+	foreach ( [ 'refuse', 'accept', 'accept_anyway', 'accepted', 'refused', 'link', 'allowed', 'not_allowed' ] as $key ) {
 		$clean[ $key ] = sanitize_text_field( $input[ $key ] ?? '' );
 	}
 	return $clean;
@@ -150,6 +150,8 @@ function no_thanks_settings_page(): void {
 				$row( 'accepted', __( 'Reminder after accepting', 'no-thanks' ), __( 'Shown when the banner is reopened; {date} is replaced by the date of the choice.', 'no-thanks' ) );
 				$row( 'refused', __( 'Reminder after refusing', 'no-thanks' ) );
 				$row( 'link', __( 'Footer link', 'no-thanks' ), __( 'Added to the footer by the theme. Any other link to #no-thanks also reopens the banner.', 'no-thanks' ) );
+				$row( 'allowed', __( 'Corner button when allowed', 'no-thanks' ), __( 'Once the banner is closed, a cookie button in the corner shows the state and reopens it; this text shows on hover.', 'no-thanks' ) );
+				$row( 'not_allowed', __( 'Corner button when not allowed', 'no-thanks' ) );
 				?>
 			</table>
 			<?php submit_button(); ?>

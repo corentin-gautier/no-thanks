@@ -32,6 +32,8 @@ add_action( 'wp_enqueue_scripts', function () {
 			'acceptAnyway' => $options['accept_anyway'],
 			'accepted'     => $options['accepted'],
 			'refused'      => $options['refused'],
+			'allowed'      => $options['allowed'],
+			'notAllowed'   => $options['not_allowed'],
 		],
 	] );
 

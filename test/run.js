@@ -30,15 +30,18 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   };
   const runs = page => page.evaluate(() => runs.join(','));
   const shown = page => page.locator('dialog.no-thanks[open]').count();
+  const toggle = page => page.locator('.no-thanks-toggle:not([hidden])');
 
   // First visit, then accept
   let page = await fresh();
   check('first visit shows the banner', await shown(page) === 1);
   check('nothing runs before consent', await runs(page) === '');
+  check('no corner button before a choice', await toggle(page).count() === 0);
   check('first visit leaves the focus alone', await page.evaluate(() => document.activeElement === document.body));
   await page.getByRole('button', { name: 'OK' }).click();
   check('accept runs everything in order', await runs(page) === 'template,nested,plain');
   check('banner closes', await shown(page) === 0);
+  check('corner button: allowed', await toggle(page).count() === 1 && await page.locator('.no-thanks-toggle--on').count() === 1);
   await page.reload();
   check('accepted: no banner on next visit', await shown(page) === 0);
   check('accepted: runs on next visit', await runs(page) === 'template,nested,plain');
@@ -49,6 +52,10 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   await page.keyboard.press('Escape');
   check('Escape closes', await shown(page) === 0);
   check('focus back on the link', await page.evaluate(() => document.activeElement.id) === 'settings');
+  await toggle(page).click();
+  check('corner button reopens, hides', await shown(page) === 1 && await toggle(page).count() === 0);
+  await page.keyboard.press('Escape');
+  check('focus back on the corner button', await page.evaluate(() => document.activeElement.classList.contains('no-thanks-toggle')));
 
   // Revoke: reload, tracker cookie removed
   await page.click('#settings');
@@ -66,6 +73,8 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   await page.getByRole('button', { name: 'No thanks' }).click();
   await page.reload();
   check('refused: no banner, nothing runs', await shown(page) === 0 && await runs(page) === '');
+  check('corner button: not allowed', await page.locator('.no-thanks-toggle--off:not([hidden])').count() === 1);
+  check('corner button says it', (await toggle(page).textContent()) === 'Cookies not allowed');
   await page.context().close();
 
   // Global Privacy Control
@@ -74,6 +83,7 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   check('GPC: notice has no button', await page.locator('.no-thanks button').count() === 0);
   await page.waitForTimeout(6500);
   check('GPC: notice fades out', await shown(page) === 0);
+  check('GPC: corner button, not allowed', await page.locator('.no-thanks-toggle--off:not([hidden])').count() === 1);
   await page.reload();
   check('GPC: notice only once', await shown(page) === 0 && await runs(page) === '');
   await page.click('#settings');

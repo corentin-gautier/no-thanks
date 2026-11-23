@@ -4,7 +4,8 @@
  * Blocked content is written as `<template data-no-thanks>` (any HTML, scripts included)
  * or `<script type="text/plain" data-no-thanks>`; it only runs once the visitor agrees.
  * The choice is kept in localStorage (no cookie). Do Not Track and Global Privacy Control
- * count as a refusal (told once, in a short notice). Any link to `#no-thanks` reopens the banner.
+ * count as a refusal (told once, in a short notice). Once the banner is closed, a small cookie button
+ * in the corner shows the state and reopens it; so does any link to `#no-thanks`.
  *
  * Config: `window.noThanksConfig = { privacyUrl, revision, maxAge, cookies, buttonClass, texts }`;
  * `texts.message` and `texts.dnt` are HTML (the site owner's own text).
@@ -33,6 +34,8 @@
     accept: 'OK',
     acceptAnyway: 'Allow anyway',
     more: 'Learn more',
+    allowed: 'Cookies allowed',
+    notAllowed: 'Cookies not allowed',
     ...config.texts,
   };
 
@@ -49,6 +52,7 @@
 
   let choice = read();
   let dialog;
+  let toggle;
   let opener;
   let ran = false;
 
@@ -110,11 +114,32 @@
     type: 'button', textContent: label, onclick,
   });
 
+  const COOKIE = '<path d="M12 2.5a9.5 9.5 0 1 0 9.5 9.6 3 3 0 0 1-3.6-3.1 3 3 0 0 1-3.3-3.4A3 3 0 0 1 12 2.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.5" cy="10" r="1.3"/><circle cx="9.5" cy="15.5" r="1.3"/><circle cx="14.5" cy="14" r="1.3"/>';
+  const ICONS = {
+    on: `${COOKIE}<circle class="no-thanks-toggle__badge" cx="18.5" cy="18.5" r="5.5"/><path d="m16 18.6 1.7 1.7 3-3.2" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
+    off: `<g opacity=".55">${COOKIE}</g><path d="m3.5 3.5 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
+  };
+
+  /** The corner button: shows the state once the banner is closed (a choice, or the browser's signal), reopens it. */
+  const showToggle = () => {
+    if (dialog || !(choice || doNotTrack)) return;
+    if (!toggle) {
+      toggle = node('button', '', { type: 'button', onclick: () => { opener = toggle; open(true); } });
+      document.body.append(toggle);
+    }
+    const state = allowed() ? 'on' : 'off';
+    toggle.className = `no-thanks-toggle no-thanks-toggle--${state}`;
+    toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICONS[state]}</svg>`;
+    toggle.append(node('span', 'no-thanks-toggle__text', { textContent: state === 'on' ? texts.allowed : texts.notAllowed }));
+    toggle.hidden = false;
+  };
+
   const close = () => {
     if (!dialog) return;
     dialog.close();
     dialog.remove();
     dialog = null;
+    showToggle();
     if (opener) opener.focus();
     opener = null;
   };
@@ -122,6 +147,7 @@
   /** Shows the banner; `reopened` when asked for from a link (adds the current state; Escape closes it). */
   const open = (reopened, notice = false) => {
     dialog?.remove();
+    if (toggle) toggle.hidden = true;
     const id = 'no-thanks-text';
     dialog = node('dialog', 'no-thanks', { ariaLabel: texts.label });
     dialog.setAttribute('aria-describedby', id);
@@ -192,6 +218,7 @@
   const start = () => {
     if (allowed()) run();
     else if (!choice) doNotTrack ? notify() : open(false);
+    showToggle();
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();

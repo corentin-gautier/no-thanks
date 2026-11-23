@@ -5,7 +5,7 @@ An ultra-light consent banner: about 2 KB gzipped, no dependency, no cookie. Do 
 - A small, non-blocking banner; « No thanks » and « OK » weigh the same.
 - Blocked code only runs once the visitor agrees.
 - The choice is kept in `localStorage` for 6 months, and asked again when the trackers change.
-- Any link to `#no-thanks` reopens the banner, so visitors can change their mind. Refusing after agreeing deletes the trackers' cookies and reloads the page.
+- Once the banner is closed, a small cookie button in the corner shows the state (green check when allowed, crossed out otherwise) and reopens it; any link to `#no-thanks` does too, so visitors can change their mind. Refusing after agreeing deletes the trackers' cookies and reloads the page.
 
 ## WordPress
 
@@ -34,7 +34,7 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 <a href="#no-thanks">Cookies</a>
 ```
 
-Options: `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `privacyUrl` (adds a « Learn more » link after the message), `buttonClass`, `texts`: `message` and `dnt` (HTML), `refuse`, `accept`, `acceptAnyway`, `accepted` and `refused` (`{date}` is replaced), `more`, `label` (the dialog's accessible name).
+Options: `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `privacyUrl` (adds a « Learn more » link after the message), `buttonClass`, `texts`: `message` and `dnt` (HTML), `refuse`, `accept`, `acceptAnyway`, `accepted` and `refused` (`{date}` is replaced), `more`, `allowed` and `notAllowed` (the corner button's text), `label` (the dialog's accessible name). The check's colour is `--no-thanks-ok`.
 
 API: `noThanks.open()`, `noThanks.consent`, `noThanks.set(true|false)`; event `no-thanks:change` on `document` (`detail.consent`).
 

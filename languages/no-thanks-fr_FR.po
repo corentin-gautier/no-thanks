@@ -29,8 +29,20 @@ msgstr "Bouton pour autoriser quand même"
 msgid "Cookies"
 msgstr "Cookies"
 
+msgid "Cookies allowed"
+msgstr "Cookies autorisés"
+
 msgid "Cookies and trackers"
 msgstr "Cookies et traceurs"
+
+msgid "Cookies not allowed"
+msgstr "Cookies non autorisés"
+
+msgid "Corner button when allowed"
+msgstr "Bouton d’angle si autorisé"
+
+msgid "Corner button when not allowed"
+msgstr "Bouton d’angle si non autorisé"
 
 msgid "Footer link"
 msgstr "Lien de pied de page"
@@ -53,6 +65,9 @@ msgstr "Non merci"
 msgid "OK"
 msgstr "D’accord"
 
+msgid "Once the banner is closed, a cookie button in the corner shows the state and reopens it; this text shows on hover."
+msgstr "Une fois le bandeau fermé, un bouton cookie dans l’angle montre l’état et le rouvre ; ce texte s’affiche au survol."
+
 msgid "Paste the code as the service gives it. It only runs once the visitor agrees."
 msgstr "Collez le code tel que le service le donne. Il ne s’exécute qu’après l’accord du visiteur."
 
@@ -74,11 +89,11 @@ msgstr "Scripts dans le head"
 msgid "Settings"
 msgstr "Réglages"
 
-msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
-msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
-
 msgid "Shown when the banner is reopened; {date} is replaced by the date of the choice."
 msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la date du choix."
+
+msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
+msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
 
 msgid "This site would like to measure its audience. Is that OK?"
 msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
