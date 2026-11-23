@@ -46,31 +46,59 @@ function no_thanks_defaults(): array {
 		'accepted'      => __( 'You agreed on {date}.', 'no-thanks' ),
 		/* translators: {date} is replaced, keep it as is. */
 		'refused'       => __( 'You refused on {date}.', 'no-thanks' ),
+		/* translators: {date} is replaced, keep it as is. */
+		'chosen'        => __( 'Your choices of {date}.', 'no-thanks' ),
+		'choose'        => __( 'Choose', 'no-thanks' ),
+		'save'          => __( 'Save', 'no-thanks' ),
 		'link'          => __( 'Cookies', 'no-thanks' ),
 		'allowed'       => __( 'Cookies allowed', 'no-thanks' ),
+		'some'          => __( 'Some cookies allowed', 'no-thanks' ),
 		'not_allowed'   => __( 'Cookies not allowed', 'no-thanks' ),
 	];
 }
 
 /**
- * Plugin options: the texts (an empty one falls back to its default) and the blocked scripts.
+ * The purposes: id, label, description and the scripts each one holds back. Settings saved before
+ * purposes existed (`head`, `body`) become one « Audience measurement » purpose.
  *
- * @return array<string, string>
+ * @return list<array{id: string, label: string, description: string, head: string, body: string}>
+ */
+function no_thanks_purposes( array $saved ): array {
+	$purposes = $saved['purposes'] ?? null;
+	if ( null === $purposes ) {
+		$purposes = [ [ 'id' => 'audience', 'label' => '', 'head' => $saved['head'] ?? '', 'body' => $saved['body'] ?? '' ] ];
+	}
+	return array_map( fn( $p ) => [
+		'id'          => (string) ( $p['id'] ?? 'audience' ),
+		'label'       => (string) ( $p['label'] ?? '' ) ?: __( 'Audience measurement', 'no-thanks' ),
+		'description' => (string) ( $p['description'] ?? '' ),
+		'head'        => (string) ( $p['head'] ?? '' ),
+		'body'        => (string) ( $p['body'] ?? '' ),
+	], (array) $purposes );
+}
+
+/**
+ * Plugin options: the texts (an empty one falls back to its default) and the purposes with their scripts.
+ *
+ * @return array<string, mixed>
  */
 function no_thanks_options(): array {
-	$options = array_merge( [ 'head' => '', 'body' => '' ], (array) get_option( 'no_thanks', [] ) );
+	$saved   = (array) get_option( 'no_thanks', [] );
+	$options = [ 'purposes' => no_thanks_purposes( $saved ) ];
 	foreach ( no_thanks_defaults() as $key => $default ) {
-		$options[ $key ] = ( $options[ $key ] ?? '' ) ?: $default;
+		$options[ $key ] = ( $saved[ $key ] ?? '' ) ?: $default;
 	}
 	return $options;
 }
 
 /**
- * Whether the banner is on: at least one script waits for consent.
+ * Whether the banner is on: some script waits for consent, or several purposes are set
+ * (their blocked content may be in the pages, as `<template data-no-thanks="id">`).
  */
 function no_thanks_active(): bool {
-	$options = no_thanks_options();
-	return '' !== trim( $options['head'] . $options['body'] );
+	$purposes = no_thanks_options()['purposes'];
+	$scripts  = implode( '', array_map( fn( $p ) => $p['head'] . $p['body'], $purposes ) );
+	return '' !== trim( $scripts ) || count( $purposes ) > 1;
 }
 
 /**

@@ -21,11 +21,11 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   await new Promise(r => server.listen(0, r));
   const base = `http://localhost:${server.address().port}/`;
   const browser = await chromium.launch();
-  const fresh = async (gpc = false) => {
+  const fresh = async (gpc = false, path = '') => {
     const ctx = await browser.newContext();
     if (gpc) await ctx.addInitScript(() => Object.defineProperty(navigator, 'globalPrivacyControl', { get: () => true }));
     const page = await ctx.newPage();
-    await page.goto(base);
+    await page.goto(base + path);
     return page;
   };
   const runs = page => page.evaluate(() => runs.join(','));
@@ -92,6 +92,46 @@ const check = (name, ok) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`); if
   check('GPC: explicit consent runs', await runs(page) === 'template,nested,plain');
   await page.reload();
   check('GPC: explicit consent kept', await runs(page) === 'template,nested,plain');
+
+  await page.context().close();
+
+  // Several purposes
+  const multi = 'test/multi.html';
+  const switches = page => page.locator('.no-thanks__purpose input');
+  const corner = async page => (await page.locator('.no-thanks-toggle').getAttribute('class')).split('--')[1];
+  page = await fresh(false, multi);
+  check('purposes: Choose shown', await page.getByRole('button', { name: 'Choose' }).count() === 1);
+  await page.getByRole('button', { name: 'Choose' }).click();
+  check('purposes: one switch each, all off', await switches(page).count() === 2 && !(await switches(page).nth(0).isChecked()) && !(await switches(page).nth(1).isChecked()));
+  check('purposes: focus on the first switch', await page.evaluate(() => document.activeElement.type === 'checkbox'));
+  await page.getByRole('switch', { name: /Videos/ }).check();
+  await page.getByRole('button', { name: 'Save' }).click();
+  check('purposes: only the chosen one runs', await runs(page) === 'videos');
+  check('purposes: corner button, some', await corner(page) === 'some');
+  check('purposes: API', await page.evaluate(() => noThanks.allows('videos') && !noThanks.allows('audience') && !noThanks.consent));
+  await page.reload();
+  check('purposes: kept on next visit', await shown(page) === 0 && await runs(page) === 'videos');
+  await page.click('#settings');
+  check('purposes: reopened on the switches', await switches(page).nth(1).isChecked() && !(await switches(page).nth(0).isChecked()));
+  check('purposes: reopened with the date', (await page.locator('.no-thanks__state').textContent()).includes('Your choices of'));
+  await page.getByRole('switch', { name: /Audience/ }).check();
+  await page.getByRole('button', { name: 'Save' }).click();
+  check('purposes: adding one runs it, then what needs all', await runs(page) === 'videos,audience,all');
+  check('purposes: corner button, on', await corner(page) === 'on');
+  await page.click('#settings');
+  await page.getByRole('switch', { name: /Audience/ }).uncheck();
+  await Promise.all([page.waitForNavigation(), page.getByRole('button', { name: 'Save' }).click()]);
+  check('purposes: taking one back reloads, clears cookies', await runs(page) === 'videos' && !(await page.evaluate(() => document.cookie)).includes('_pk'));
+  await page.context().close();
+
+  page = await fresh(false, multi);
+  await page.getByRole('button', { name: 'OK' }).click();
+  check('purposes: OK allows everything', await runs(page) === 'audience,videos,all' && await corner(page) === 'on');
+  await page.context().close();
+
+  page = await fresh(false, multi);
+  await page.getByRole('button', { name: 'No thanks' }).click();
+  check('purposes: No thanks refuses everything', await runs(page) === '' && await corner(page) === 'off');
 
   await browser.close();
   server.close();

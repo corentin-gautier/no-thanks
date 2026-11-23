@@ -25,7 +25,9 @@
     const fr = q.get('lang') === 'fr';
     const day = 864e5;
     const store = {};
-    const choice = { accepted: true, refused: false, 'dnt-accepted': true, 'dnt-refused': false, 'button-on': true, 'button-off': false, 'button-hover': true }[state];
+    const multi = state.startsWith('multi') || state === 'button-some';
+    const some = { audience: true, videos: true, ads: false };
+    const choice = { accepted: true, refused: false, 'dnt-accepted': true, 'dnt-refused': false, 'button-on': true, 'button-off': false, 'button-hover': true, 'multi-reopened': some, 'button-some': some }[state];
     if (choice !== undefined) store['no-thanks'] = JSON.stringify({ v: choice, t: Date.now() - 3 * day, r: '' });
     if (state === 'dnt-reopened' || state === 'button-dnt') store['no-thanks-notice'] = '1';
     Object.defineProperty(window, 'localStorage', { value: {
@@ -52,7 +54,20 @@
     if (state === 'long') texts.message = fr
       ? 'Ce site utilise <strong>Matomo</strong> pour mesurer son audience et <strong>YouTube</strong> pour afficher des vidéos. Ces services peuvent déposer des traceurs sur votre appareil. Vous êtes d’accord ?'
       : 'This site uses <strong>Matomo</strong> to measure its audience and <strong>YouTube</strong> to show videos. These services may set trackers on your device. Is that OK?';
-    window.noThanksConfig = { privacyUrl: state === 'no-link' ? '' : '#privacy', texts };
+    if (fr) Object.assign(texts, { chosen: 'Vos choix du {date}.', choose: 'Choisir', save: 'Enregistrer', some: 'Certains cookies autorisés' });
+    if (multi) texts.message = fr
+      ? 'Ce site aimerait mesurer son audience, afficher des vidéos YouTube et mesurer ses publicités. Vous êtes d’accord ?'
+      : 'This site would like to measure its audience, show YouTube videos and measure its ads. Is that OK?';
+    const purposes = multi ? (fr ? [
+      { id: 'audience', label: 'Mesure d’audience', description: 'Matomo : pages vues, anonyme' },
+      { id: 'videos', label: 'Vidéos', description: 'Lecteurs YouTube dans les pages' },
+      { id: 'ads', label: 'Publicité', description: 'Meta Pixel : mesure nos publicités' },
+    ] : [
+      { id: 'audience', label: 'Audience measurement', description: 'Matomo: pages viewed, anonymous' },
+      { id: 'videos', label: 'Videos', description: 'YouTube players in the pages' },
+      { id: 'ads', label: 'Advertising', description: 'Meta Pixel: measures our ads' },
+    ]) : [];
+    window.noThanksConfig = { privacyUrl: state === 'no-link' ? '' : '#privacy', purposes, texts };
   </script>
   <script src="/dist/no-thanks.js" defer></script>
 </head>
@@ -65,6 +80,7 @@
     if (state === 'button-hover') document.body.classList.add('hover');
     addEventListener('DOMContentLoaded', () => {
       // Reopened states: as if the visitor clicked the footer link
+      if (state === 'multi-choose') document.querySelector('.no-thanks__choose').click();
       if (/accepted|refused|reopened/.test(state)) {
         const y = parent.scrollY;
         noThanks.open();

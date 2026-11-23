@@ -1,6 +1,9 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: No Thanks 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-24 00:09+0100\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8,63 +11,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: no-thanks\n"
 
-#, php-format
-msgid "%1$s: [what it is used for]. Its cookies are kept [how long]. Its privacy policy: %2$s"
-msgstr "%1$s : [à quoi il sert]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : %2$s"
-
-msgid "A consent banner for the trackers this site uses. Leave the scripts empty and nothing is loaded."
-msgstr "Un bandeau de consentement pour les traceurs du site. Laissez les scripts vides et rien n’est chargé."
-
-msgid "Accept button"
-msgstr "Bouton d’acceptation"
-
-msgid "Added to the footer by the theme. Any other link to #no-thanks also reopens the banner."
-msgstr "Ajouté au pied de page par le thème. Tout autre lien vers #no-thanks rouvre aussi le bandeau."
-
-msgid "Allow anyway"
-msgstr "L’autoriser quand même"
-
-msgid "Banner"
-msgstr "Bandeau"
-
-msgid "Button to allow anyway"
-msgstr "Bouton pour autoriser quand même"
-
-msgid "Cookies"
-msgstr "Cookies"
-
-msgid "Cookies allowed"
-msgstr "Cookies autorisés"
-
-msgid "Cookies and trackers"
-msgstr "Cookies et traceurs"
-
-msgid "Cookies not allowed"
-msgstr "Cookies non autorisés"
-
-msgid "Corner button when allowed"
-msgstr "Bouton d’angle si autorisé"
-
-msgid "Corner button when not allowed"
-msgstr "Bouton d’angle si non autorisé"
-
-msgid "Footer link"
-msgstr "Lien de pied de page"
+msgid "This site would like to measure its audience. Is that OK?"
+msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
 
 msgid "Learn more"
 msgstr "En savoir plus"
 
-msgid "Message"
-msgstr "Message"
+msgid "Cookies and trackers"
+msgstr "Cookies et traceurs"
 
-msgid "Message when the browser asks not to be tracked"
-msgstr "Message quand le navigateur demande à ne pas être suivi"
-
-msgid "Name the services and what they are for. Changing it asks every visitor again."
-msgstr "Nommez les services et leur usage. Le modifier redemande l’accord de tous les visiteurs."
-
-msgid "No Thanks only lets the scripts set in its settings run once the visitor agrees. Complete the list of services: what each one is for and how long its cookies last."
-msgstr "No Thanks ne laisse s’exécuter les scripts de ses réglages qu’après l’accord du visiteur. Complétez la liste des services : à quoi sert chacun et combien de temps durent ses cookies."
+msgid "Your browser asks not to be tracked: noted, no tracker is on."
+msgstr "Votre navigateur demande à ne pas être suivi : c’est noté, aucun traceur n’est activé."
 
 msgid "No thanks"
 msgstr "Non merci"
@@ -72,38 +29,54 @@ msgstr "Non merci"
 msgid "OK"
 msgstr "D’accord"
 
-msgid "Once the banner is closed, a cookie button in the corner shows the state and reopens it; this text shows on hover."
-msgstr "Une fois le bandeau fermé, un bouton cookie dans l’angle montre l’état et le rouvre ; ce texte s’affiche au survol."
+msgid "Allow anyway"
+msgstr "L’autoriser quand même"
 
-msgid "Paste the code as the service gives it. It only runs once the visitor agrees."
-msgstr "Collez le code tel que le service le donne. Il ne s’exécute qu’après l’accord du visiteur."
+#. translators: {date} is replaced, keep it as is.
+msgid "You agreed on {date}."
+msgstr "Vous avez accepté le {date}."
 
-msgid "Refuse button"
-msgstr "Bouton de refus"
+#. translators: {date} is replaced, keep it as is.
+msgid "You refused on {date}."
+msgstr "Vous avez refusé le {date}."
 
-msgid "Reminder after accepting"
-msgstr "Rappel après acceptation"
+#. translators: {date} is replaced, keep it as is.
+msgid "Your choices of {date}."
+msgstr "Vos choix du {date}."
 
-msgid "Reminder after refusing"
-msgstr "Rappel après refus"
+msgid "Choose"
+msgstr "Choisir"
 
-msgid "Scripts at the end of the page"
-msgstr "Scripts en fin de page"
+msgid "Save"
+msgstr "Enregistrer"
 
-msgid "Scripts in the head"
-msgstr "Scripts dans le head"
+msgid "Cookies"
+msgstr "Cookies"
 
-msgid "Services that may set trackers on this site:"
-msgstr "Services pouvant déposer des traceurs sur ce site :"
+msgid "Cookies allowed"
+msgstr "Cookies autorisés"
 
-msgid "Settings"
-msgstr "Réglages"
+msgid "Some cookies allowed"
+msgstr "Certains cookies autorisés"
 
-msgid "Shown when the banner is reopened; {date} is replaced by the date of the choice."
-msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la date du choix."
+msgid "Cookies not allowed"
+msgstr "Cookies non autorisés"
 
-msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
-msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
+msgid "Audience measurement"
+msgstr "Mesure d’audience"
+
+#. translators: 1: purpose, 2: service name, 3: link to its privacy policy.
+#, php-format
+msgid "%1$s: %2$s, [what it does]. Its cookies are kept [how long]. Its privacy policy: %3$s"
+msgstr "%1$s : %2$s, [ce qu’il fait]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : %3$s"
+
+#. translators: %s: purpose.
+#, php-format
+msgid "%s: [service] ([provider]), [what it does]. Its cookies are kept [how long]. Its privacy policy: [link]"
+msgstr "%s : [service] ([éditeur]), [ce qu’il fait]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : [lien]"
+
+msgid "No Thanks only lets the scripts set in its settings run once the visitor agrees. Complete the list: what each service does and how long its cookies last."
+msgstr "No Thanks ne laisse s’exécuter les scripts de ses réglages qu’après l’accord du visiteur. Complétez la liste : ce que fait chaque service et combien de temps durent ses cookies."
 
 msgid "Suggested text:"
 msgstr "Texte suggéré :"
@@ -111,29 +84,121 @@ msgstr "Texte suggéré :"
 msgid "This site only uses trackers (cookies and similar technologies) with your consent: none is set before you answer, and refusing is as easy as accepting."
 msgstr "Ce site n’utilise des traceurs (cookies et technologies similaires) qu’avec votre accord : aucun n’est déposé avant votre réponse, et refuser est aussi simple qu’accepter."
 
-msgid "This site would like to measure its audience. Is that OK?"
-msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Trackers"
-msgstr "Traceurs"
-
-msgid "You agreed on {date}."
-msgstr "Vous avez accepté le {date}."
+msgid "Your answer is kept in your browser for 6 months (in its local storage, not in a cookie); we then ask again. If your browser asks not to be tracked (Do Not Track or Global Privacy Control), we take it as a refusal."
+msgstr "Votre réponse est conservée 6 mois dans votre navigateur (dans son stockage local, pas dans un cookie) ; nous vous la redemandons ensuite. Si votre navigateur demande à ne pas être suivi (Do Not Track ou Global Privacy Control), nous le prenons comme un refus."
 
 msgid "You can change your mind at any time with the cookie button in the corner of each page. When you withdraw your consent, the trackers’ cookies are deleted."
 msgstr "Vous pouvez changer d’avis à tout moment avec le bouton cookie dans l’angle de chaque page. Quand vous retirez votre accord, les cookies des traceurs sont supprimés."
 
-msgid "You refused on {date}."
-msgstr "Vous avez refusé le {date}."
+msgid "Trackers this site may use, by purpose (you can accept each purpose on its own):"
+msgstr "Traceurs que ce site peut utiliser, par finalité (vous pouvez accepter chaque finalité séparément) :"
 
-msgid "Your answer is kept in your browser for 6 months (in its local storage, not in a cookie); we then ask again. If your browser asks not to be tracked (Do Not Track or Global Privacy Control), we take it as a refusal."
-msgstr "Votre réponse est conservée 6 mois dans votre navigateur (dans son stockage local, pas dans un cookie) ; nous vous la redemandons ensuite. Si votre navigateur demande à ne pas être suivi (Do Not Track ou Global Privacy Control), nous le prenons comme un refus."
+msgid "Trackers this site may use:"
+msgstr "Traceurs que ce site peut utiliser :"
 
-msgid "Your browser asks not to be tracked: noted, no tracker is on."
-msgstr "Votre navigateur demande à ne pas être suivi : c’est noté, aucun traceur n’est activé."
+msgid "Settings"
+msgstr "Réglages"
 
-msgid "[Service] ([provider]): [what it is used for]. Its cookies are kept [how long]. Its privacy policy: [link]"
-msgstr "[Service] ([éditeur]) : [à quoi il sert]. Ses cookies sont conservés [durée]. Sa politique de confidentialité : [lien]"
+msgid "A consent banner for the trackers this site uses. Leave the scripts empty and nothing is loaded."
+msgstr "Un bandeau de consentement pour les traceurs du site. Laissez les scripts vides et rien n’est chargé."
+
+msgid "Trackers"
+msgstr "Traceurs"
+
+msgid "One block per purpose. With one purpose the banner asks once; with several, visitors can also choose purpose by purpose. Fill in the empty block to add a purpose, empty a block to remove it."
+msgstr "Un bloc par finalité. Avec une finalité, le bandeau demande une fois ; avec plusieurs, les visiteurs peuvent aussi choisir finalité par finalité. Remplissez le bloc vide pour ajouter une finalité, videz un bloc pour la supprimer."
+
+msgid "New purpose"
+msgstr "Nouvelle finalité"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "e.g. Videos"
+msgstr "ex. Vidéos"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Shown under its switch: the services and what they do."
+msgstr "Affichée sous son interrupteur : les services et ce qu’ils font."
+
+msgid "Scripts in the head"
+msgstr "Scripts dans le head"
+
+msgid "Scripts at the end of the page"
+msgstr "Scripts en fin de page"
+
+msgid "Paste the code as the service gives it. It only runs once the visitor agrees."
+msgstr "Collez le code tel que le service le donne. Il ne s’exécute qu’après l’accord du visiteur."
+
+#. translators: %s: HTML code example.
+#, php-format
+msgid "Elsewhere in the site, wrap code in %s to tie it to this purpose."
+msgstr "Ailleurs dans le site, entourez du code de %s pour le rattacher à cette finalité."
+
+msgid "Banner"
+msgstr "Bandeau"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Name the services and what they are for. Changing it asks every visitor again."
+msgstr "Nommez les services et leur usage. Le modifier redemande l’accord de tous les visiteurs."
+
+msgid "Refuse button"
+msgstr "Bouton de refus"
+
+msgid "Accept button"
+msgstr "Bouton d’acceptation"
+
+msgid "Link to choose by purpose"
+msgstr "Lien pour choisir par finalité"
+
+msgid "Only with several purposes, like the texts below about choices."
+msgstr "Seulement avec plusieurs finalités, comme les textes de choix ci-dessous."
+
+msgid "Button to save the choices"
+msgstr "Bouton pour enregistrer les choix"
+
+msgid "Message when the browser asks not to be tracked"
+msgstr "Message quand le navigateur demande à ne pas être suivi"
+
+msgid "Such visitors get no tracker: this message shows a few seconds on their first visit, then from the footer link."
+msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques secondes à leur première visite, puis depuis le lien de pied de page."
+
+msgid "Button to allow anyway"
+msgstr "Bouton pour autoriser quand même"
+
+msgid "Reminder after accepting"
+msgstr "Rappel après acceptation"
+
+msgid "Shown when the banner is reopened; {date} is replaced by the date of the choice."
+msgstr "Affiché quand le bandeau est rouvert ; {date} est remplacé par la date du choix."
+
+msgid "Reminder after refusing"
+msgstr "Rappel après refus"
+
+msgid "Reminder after choosing by purpose"
+msgstr "Rappel après un choix par finalité"
+
+msgid "Footer link"
+msgstr "Lien de pied de page"
+
+msgid "Added to the footer by the theme. Any other link to #no-thanks also reopens the banner."
+msgstr "Ajouté au pied de page par le thème. Tout autre lien vers #no-thanks rouvre aussi le bandeau."
+
+msgid "Corner button when allowed"
+msgstr "Bouton d’angle si autorisé"
+
+msgid "Once the banner is closed, a cookie button in the corner shows the state and reopens it; this text shows on hover."
+msgstr "Une fois le bandeau fermé, un bouton cookie dans l’angle montre l’état et le rouvre ; ce texte s’affiche au survol."
+
+msgid "Corner button when some are allowed"
+msgstr "Bouton d’angle si certains sont autorisés"
+
+msgid "Corner button when not allowed"
+msgstr "Bouton d’angle si non autorisé"

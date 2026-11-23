@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>No Thanks test page, several purposes</title>
+  <link rel="stylesheet" href="/dist/no-thanks.css">
+  <script>
+    window.noThanksConfig = {
+      revision: '1',
+      purposes: [
+        { id: 'audience', label: 'Audience measurement', description: 'Pages viewed' },
+        { id: 'videos', label: 'Videos' },
+      ],
+    };
+    window.runs = [];
+  </script>
+  <script src="/dist/no-thanks.js" defer></script>
+  <template data-no-thanks="audience"><script>runs.push('audience'); document.cookie = '_pk_id=1; path=/';</script></template>
+</head>
+<body>
+  <template data-no-thanks="videos"><script>runs.push('videos')</script></template>
+  <template data-no-thanks><script>runs.push('all')</script></template>
+  <footer><a id="settings" href="#no-thanks">Cookies</a></footer>
+</body>
+</html>

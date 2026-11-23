@@ -21,8 +21,13 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_script( 'no-thanks', plugins_url( 'dist/no-thanks.js', __DIR__ ), [], NO_THANKS_VERSION, [ 'strategy' => 'defer' ] );
 
 	$config = apply_filters( 'no_thanks_config', [
-		// New trackers or a new message ask the visitors again
-		'revision' => substr( md5( $options['message'] . $options['head'] . $options['body'] ), 0, 8 ),
+		// New trackers, purposes or message ask the visitors again
+		'revision' => substr( md5( $options['message'] . wp_json_encode( $options['purposes'] ) ), 0, 8 ),
+		'purposes' => array_map( fn( $p ) => [
+			'id'          => $p['id'],
+			'label'       => $p['label'],
+			'description' => $p['description'],
+		], $options['purposes'] ),
 		'texts'    => [
 			'label'        => $options['label'],
 			'message'      => $options['message'],
@@ -32,7 +37,11 @@ add_action( 'wp_enqueue_scripts', function () {
 			'acceptAnyway' => $options['accept_anyway'],
 			'accepted'     => $options['accepted'],
 			'refused'      => $options['refused'],
+			'chosen'       => $options['chosen'],
+			'choose'       => $options['choose'],
+			'save'         => $options['save'],
 			'allowed'      => $options['allowed'],
+			'some'         => $options['some'],
 			'notAllowed'   => $options['not_allowed'],
 		],
 	] );
@@ -41,13 +50,15 @@ add_action( 'wp_enqueue_scripts', function () {
 } );
 
 /**
- * Prints blocked HTML: inert in a <template> until the visitor agrees.
+ * Prints each purpose's blocked HTML for a spot (`head` or `body`): inert in a <template> until the visitor agrees to it.
  */
-function no_thanks_print( string $html ): void {
-	if ( '' !== trim( $html ) ) {
-		echo "<template data-no-thanks>\n" . $html . "\n</template>\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- scripts saved by an admin with unfiltered_html
+function no_thanks_print( string $spot ): void {
+	foreach ( no_thanks_options()['purposes'] as $p ) {
+		if ( '' !== trim( $p[ $spot ] ) ) {
+			printf( "<template data-no-thanks=\"%s\">\n%s\n</template>\n", esc_attr( $p['id'] ), $p[ $spot ] ); // phpcs:ignore WordPress.Security.EscapeOutput -- scripts saved by an admin with unfiltered_html
+		}
 	}
 }
 
-add_action( 'wp_head', fn() => no_thanks_print( no_thanks_options()['head'] ), 99 );
-add_action( 'wp_footer', fn() => no_thanks_print( no_thanks_options()['body'] ), 5 );
+add_action( 'wp_head', fn() => no_thanks_print( 'head' ), 99 );
+add_action( 'wp_footer', fn() => no_thanks_print( 'body' ), 5 );
