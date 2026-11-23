@@ -60,7 +60,7 @@ function no_thanks_sanitize( $input ): array {
 		$html          = preg_replace( '#</p>\s*<p[^>]*>#i', '<br>', $input[ $key ] ?? '' );
 		$clean[ $key ] = trim( wp_kses( $html, $inline ) );
 	}
-	foreach ( [ 'refuse', 'accept', 'accept_anyway', 'accepted', 'refused', 'link', 'allowed', 'not_allowed' ] as $key ) {
+	foreach ( [ 'label', 'refuse', 'accept', 'accept_anyway', 'accepted', 'refused', 'link', 'allowed', 'not_allowed' ] as $key ) {
 		$clean[ $key ] = sanitize_text_field( $input[ $key ] ?? '' );
 	}
 	return $clean;
@@ -127,6 +127,7 @@ function no_thanks_settings_page(): void {
 
 			<h2><?php esc_html_e( 'Banner', 'no-thanks' ); ?></h2>
 			<table class="form-table" role="presentation">
+				<?php $row( 'label', __( 'Title', 'no-thanks' ) ); ?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Message', 'no-thanks' ); ?></th>
 					<td>

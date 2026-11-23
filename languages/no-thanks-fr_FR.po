@@ -98,6 +98,9 @@ msgstr "Ces visiteurs n’ont aucun traceur : ce message s’affiche quelques s
 msgid "This site would like to measure its audience. Is that OK?"
 msgstr "Ce site aimerait mesurer son audience. Vous êtes d’accord ?"
 
+msgid "Title"
+msgstr "Titre"
+
 msgid "Trackers"
 msgstr "Traceurs"
 

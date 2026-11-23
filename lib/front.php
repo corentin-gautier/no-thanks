@@ -24,7 +24,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		// New trackers or a new message ask the visitors again
 		'revision' => substr( md5( $options['message'] . $options['head'] . $options['body'] ), 0, 8 ),
 		'texts'    => [
-			'label'        => __( 'Cookies and trackers', 'no-thanks' ),
+			'label'        => $options['label'],
 			'message'      => $options['message'],
 			'dnt'          => $options['dnt'],
 			'refuse'       => $options['refuse'],

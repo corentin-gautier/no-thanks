@@ -115,6 +115,7 @@
   });
 
   const COOKIE = '<path d="M12 2.5a9.5 9.5 0 1 0 9.5 9.6 3 3 0 0 1-3.6-3.1 3 3 0 0 1-3.3-3.4A3 3 0 0 1 12 2.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.5" cy="10" r="1.3"/><circle cx="9.5" cy="15.5" r="1.3"/><circle cx="14.5" cy="14" r="1.3"/>';
+  const svg = paths => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${paths}</svg>`;
   const ICONS = {
     on: `${COOKIE}<circle class="no-thanks-toggle__badge" cx="18.5" cy="18.5" r="5.5"/><path d="m16 18.6 1.7 1.7 3-3.2" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
     off: `<g opacity=".55">${COOKIE}</g><path d="m3.5 3.5 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
@@ -129,7 +130,7 @@
     }
     const state = allowed() ? 'on' : 'off';
     toggle.className = `no-thanks-toggle no-thanks-toggle--${state}`;
-    toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICONS[state]}</svg>`;
+    toggle.innerHTML = svg(ICONS[state]);
     toggle.append(node('span', 'no-thanks-toggle__text', { textContent: state === 'on' ? texts.allowed : texts.notAllowed }));
     toggle.hidden = false;
   };
@@ -149,8 +150,12 @@
     dialog?.remove();
     if (toggle) toggle.hidden = true;
     const id = 'no-thanks-text';
-    dialog = node('dialog', 'no-thanks', { ariaLabel: texts.label });
+    dialog = node('dialog', 'no-thanks');
+    dialog.setAttribute('aria-labelledby', 'no-thanks-title');
     dialog.setAttribute('aria-describedby', id);
+    const title = node('p', 'no-thanks__title', { id: 'no-thanks-title', innerHTML: svg(COOKIE) });
+    title.append(texts.label);
+    dialog.append(title);
     const signal = doNotTrack && !choice;
 
     const text = node('p', 'no-thanks__text', { id, innerHTML: signal ? texts.dnt : texts.message });

@@ -34,7 +34,7 @@ Theming: every rule is in `:where()`; set `--no-thanks-bg`, `--no-thanks-color`,
 <a href="#no-thanks">Cookies</a>
 ```
 
-Options: `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `privacyUrl` (adds a « Learn more » link after the message), `buttonClass`, `texts`: `message` and `dnt` (HTML), `refuse`, `accept`, `acceptAnyway`, `accepted` and `refused` (`{date}` is replaced), `more`, `allowed` and `notAllowed` (the corner button's text), `label` (the dialog's accessible name). The check's colour is `--no-thanks-ok`.
+Options: `revision` (change it to ask again), `maxAge` (days, 182), `cookies` (name prefixes deleted on refusal), `privacyUrl` (adds a « Learn more » link after the message), `buttonClass`, `texts`: `message` and `dnt` (HTML), `refuse`, `accept`, `acceptAnyway`, `accepted` and `refused` (`{date}` is replaced), `more`, `allowed` and `notAllowed` (the corner button's text), `label` (the title, next to a cookie icon). The check's colour is `--no-thanks-ok`.
 
 API: `noThanks.open()`, `noThanks.consent`, `noThanks.set(true|false)`; event `no-thanks:change` on `document` (`detail.consent`).
 
