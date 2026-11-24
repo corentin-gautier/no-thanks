@@ -10,3 +10,4 @@
 /.versionrc export-ignore
 /demo export-ignore
 /.github export-ignore
+/docs export-ignore

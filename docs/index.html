@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No Thanks: an ultra-light cookie consent banner</title>
+<meta name="description" content="Free, open source cookie consent banner: about 3 KB gzipped, no dependency, no cookie. Respects Do Not Track and Global Privacy Control. JavaScript library and WordPress plugin.">
+<meta name="author" content="Corentin Gautier">
+<link rel="canonical" href="https://corentingautier.dev/no-thanks/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="No Thanks">
+<meta property="og:title" content="No Thanks: an ultra-light cookie consent banner">
+<meta property="og:description" content="Free, open source cookie consent banner: about 3 KB gzipped, no dependency, no cookie. Respects Do Not Track and Global Privacy Control. JavaScript library and WordPress plugin.">
+<meta property="og:url" content="https://corentingautier.dev/no-thanks/">
+<meta property="og:image" content="https://corentingautier.dev/no-thanks/assets/social-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="No Thanks: a consent banner that weighs 3 KB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f0c" media="(prefers-color-scheme: dark)">
+<meta name="google-site-verification" content="ZzQ0D93tWYmlaJGBHx_q1Hk4xZMRt_zgjYe9ATnlUfM" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "No Thanks",
+  "description": "Free, open source cookie consent banner: about 3 KB gzipped, no dependency, no cookie. Respects Do Not Track and Global Privacy Control. JavaScript library and WordPress plugin.",
+  "url": "https://corentingautier.dev/no-thanks/",
+  "image": "https://corentingautier.dev/no-thanks/assets/social-preview.png",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any web browser, WordPress",
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "codeRepository": "https://github.com/corentin-gautier/no-thanks",
+  "downloadUrl": "https://www.npmjs.com/package/no-thanks.js",
+  "author": { "@type": "Person", "name": "Corentin Gautier", "url": "https://github.com/corentin-gautier" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": [
+    "About 3 KB gzipped, CSS included, no dependency",
+    "No cookie: the choice is kept in localStorage",
+    "Do Not Track and Global Privacy Control count as a refusal",
+    "Consent by purpose, never a list of cookies",
+    "Blocked code runs only once the visitor agrees",
+    "WordPress plugin with a settings page and a privacy policy suggestion"
+  ]
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c8f031'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23111210'/%3E%3Cpath d='M10 22 22 10' stroke='%23c8f031' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f4f3ee;
+    --surface: #fbfaf6;
+    --text: #111210;
+    --muted: #55584f;
+    --border: #c9c9be;
+    --accent: #c8f031;
+    --on-accent: #111210;
+    --accent-text: #3f6212;
+    --code-bg: #e8e7df;
+    --screen: #111210;
+    --marker: linear-gradient(transparent 60%, var(--accent) 60% 92%, transparent 92%);
+    --marker-ink: currentColor;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --rule: 1.5px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e0f0c;
+      --surface: #171914;
+      --text: #eeefe6;
+      --muted: #a4a798;
+      --border: #33352d;
+      --accent-text: #c8f031;
+      --code-bg: #1f211b;
+      --screen: #191b15;
+      --marker: none;
+      --marker-ink: var(--accent);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 var(--sans);
+  }
+  a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { background: var(--accent); color: var(--on-accent); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  header.top { border-bottom: var(--rule) solid var(--text); }
+  header.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-block: 14px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; text-decoration: none; }
+  .brand:hover { background: none; color: inherit; }
+  .brand svg { flex-shrink: 0; }
+  nav { display: flex; gap: 18px; font: 13px var(--mono); }
+  nav a { text-decoration: none; }
+
+  .hero { padding: clamp(48px, 9vw, 96px) 0 56px; }
+  .hero h1 { margin: 0 0 24px; font-size: clamp(38px, 7.4vw, 76px); font-weight: 700; line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; }
+  .hero h1 em { background: var(--marker); color: var(--marker-ink); font-style: normal; font-weight: 300; }
+  .hero p { margin: 0 0 32px; max-width: 60ch; font-size: 19px; line-height: 1.5; color: var(--muted); text-wrap: pretty; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-block; padding: 13px 22px; border: var(--rule) solid var(--text); background: none; color: var(--text); font: 600 16px/1.2 var(--sans); text-decoration: none; cursor: pointer; }
+  .btn::after { content: " →"; content: " →" / ""; font-family: var(--mono); }
+  .btn.primary { background: var(--text); color: var(--bg); }
+  .btn:hover, .btn.primary:hover { background: var(--accent); color: var(--on-accent); }
+
+  .index { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--rule); margin: 0; padding: var(--rule); list-style: none; background: var(--text); }
+  .index a { display: block; height: 100%; padding: 16px 18px; background: var(--bg); color: inherit; text-decoration: none; }
+  .index a:hover { background: var(--accent); color: var(--on-accent); }
+  .index strong { display: block; letter-spacing: -0.01em; }
+  .index span { font-size: 14px; color: var(--muted); }
+  .index a:hover span { color: inherit; }
+
+  main { counter-reset: section; }
+  section { padding: 72px 0 0; counter-increment: section; scroll-margin-top: 16px; }
+  h2 { margin: 0 0 12px; font-size: clamp(30px, 4.8vw, 46px); font-weight: 700; line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+  h2::before { content: counter(section, decimal-leading-zero); content: counter(section, decimal-leading-zero) / ""; display: block; margin-bottom: 18px; color: var(--accent-text); font: 500 13px/1 var(--mono); letter-spacing: 0.08em; }
+  h2 + p { margin-top: 0; color: var(--muted); font-size: 18px; max-width: 62ch; }
+  h3 { margin: 12px 0 8px; font-size: 24px; line-height: 1.15; letter-spacing: -0.03em; }
+
+  .feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: start; padding: 32px 0; border-top: var(--rule) solid var(--text); }
+  .feature:first-of-type { margin-top: 32px; }
+  .feature p, .feature ul { margin: 0 0 12px; max-width: 62ch; }
+  .feature ul { padding-left: 20px; }
+  .feature li { margin-bottom: 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+  .tag { padding: 2px 8px; border: 1px solid currentColor; }
+  .tag.auto { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .where { font: 13px/1.5 var(--mono); color: var(--muted); }
+
+  code, kbd { font: 0.875em/1.5 var(--mono); }
+  :not(pre) > code, kbd { padding: 2px 5px; background: var(--code-bg); overflow-wrap: anywhere; }
+  pre { margin: 0 0 12px; padding: 16px 18px; background: var(--screen); color: #eeefe6; overflow-x: auto; }
+  pre code { font-size: 13.5px; }
+
+  /* Live demo */
+  .demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 32px; padding-top: 32px; border-top: var(--rule) solid var(--text); }
+  .demo p { margin: 0 0 12px; max-width: 62ch; }
+  .demo .actions { margin-top: 20px; }
+  .runs { margin: 0; padding: var(--rule); list-style: none; background: var(--text); display: grid; gap: var(--rule); }
+  .runs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 14px 18px; background: var(--bg); }
+  .runs small { grid-column: 1; color: var(--muted); font-size: 14px; }
+  .runs output { grid-row: 1 / 3; grid-column: 2; padding: 2px 8px; border: 1px solid currentColor; font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+  .runs output.ran { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .runs-head { margin: 0 0 8px; font: 13px/1.5 var(--mono); color: var(--muted); }
+
+  /* The banner, themed with the site's colors */
+  .no-thanks { --no-thanks-bg: var(--surface); --no-thanks-color: var(--text); --no-thanks-accent: var(--text); --no-thanks-accent-color: var(--bg); --no-thanks-radius: 0; --no-thanks-ok: #65a30d; }
+  .no-thanks, .no-thanks-toggle { border: var(--rule) solid var(--text); }
+
+  /* Weight */
+  .weight { width: 100%; margin-top: 32px; border-collapse: collapse; font-size: 15px; }
+  .weight th, .weight td { padding: 10px 0; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+  .weight thead th { border-bottom: var(--rule) solid var(--text); font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .weight td.num { width: 70px; padding-left: 12px; font-family: var(--mono); text-align: right; white-space: nowrap; }
+  .weight th[scope="row"] { width: 210px; padding-right: 16px; font-weight: 400; }
+  .weight .bar { display: block; height: 14px; min-width: 3px; width: calc(var(--kb) / 290 * 100%); background: var(--border); }
+  .weight tr.us th { font-weight: 700; }
+  .weight tr.us .bar { background: var(--accent); outline: 1px solid var(--text); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .small { margin: 16px 0 0; max-width: 70ch; font-size: 14px; color: var(--muted); }
+
+  .steps { margin: 32px 0 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps > li { position: relative; padding: 0 0 20px 48px; counter-increment: step; }
+  .steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; background: var(--accent); color: var(--on-accent); font: 600 13px/28px var(--mono); text-align: center; }
+  .steps p { margin: 0 0 10px; }
+  .note { margin: 0; padding: 14px 16px; border-left: 4px solid var(--accent); background: var(--surface); }
+
+  dl.options { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 24px; margin: 24px 0 0; }
+  dl.options dt { font: 0.875em/1.7 var(--mono); }
+  dl.options dd { margin: 0; color: var(--muted); }
+
+  .support { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px 24px; align-items: center; margin: 40px 0 0; padding: 20px 24px; background: var(--accent); color: var(--on-accent); }
+  .support p { margin: 0; max-width: 60ch; }
+  .support a:not(.btn):hover { background: var(--on-accent); color: var(--accent); }
+  .support .btn { border-color: var(--on-accent); background: var(--on-accent); color: var(--accent); white-space: nowrap; }
+  .support .btn:hover { background: none; color: var(--on-accent); }
+  .support .btn:focus-visible { outline-color: var(--on-accent); }
+
+  footer { margin-top: 80px; padding: 24px 0 40px; border-top: var(--rule) solid var(--text); font: 12.5px/1.6 var(--mono); color: var(--muted); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  @media (max-width: 720px) {
+    nav a.hide-sm { display: none; }
+    .demo { grid-template-columns: minmax(0, 1fr); }
+    .weight th[scope="row"] { width: 130px; }
+    dl.options { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    dl.options dd { margin-bottom: 10px; }
+    .support { grid-template-columns: auto minmax(0, 1fr); }
+    .support__btn { grid-column: 1 / -1; justify-self: start; }
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/no-thanks.js@0/dist/no-thanks-purposes.css">
+<script>
+  // The banner of this page: three made-up purposes, nothing is tracked
+  window.noThanksConfig = {
+    revision: 'site-1',
+    purposes: [
+      { id: 'audience', label: 'Audience measurement', description: 'A made-up analytics script' },
+      { id: 'videos', label: 'Videos', description: 'A made-up video player' },
+      { id: 'ads', label: 'Advertising', description: 'A made-up ad pixel' },
+    ],
+    texts: {
+      label: 'Cookies (a demo)',
+      message: 'This page tracks nothing. The banner is the real one, with three made-up purposes: <b>accept</b>, <b>refuse</b> or <b>choose</b>, then watch section 01.',
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/no-thanks.js@0/dist/no-thanks-purposes.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#c8f031"/><circle cx="16" cy="16" r="9" fill="#111210"/><path d="M10 22 22 10" stroke="#c8f031" stroke-width="2.5"/></svg>
+      No Thanks
+    </a>
+    <nav aria-label="Main">
+      <a class="hide-sm" href="#try">Demo</a>
+      <a class="hide-sm" href="#weight">Weight</a>
+      <a class="hide-sm" href="#install">Install</a>
+      <a href="https://github.com/corentin-gautier/no-thanks/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a>
+      <a href="https://github.com/corentin-gautier/no-thanks" rel="noopener" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <div class="hero">
+      <h1>A cookie consent banner that weighs <em>3&nbsp;KB</em></h1>
+      <p>No Thanks is a free, open source consent banner: about 3.3 KB gzipped with its CSS, no dependency, and no cookie of its own. Do Not Track and Global Privacy Control count as a refusal. « No thanks » and « OK » weigh the same. For any site, or as a WordPress plugin.</p>
+      <div class="actions">
+        <a class="btn primary" href="#install">Install</a>
+        <a class="btn" href="#try">Try the banner</a>
+      </div>
+    </div>
+
+    <ul class="index">
+      <li><a href="#weight"><strong>About 3 KB</strong><span>Up to 60 times lighter than the usual CMPs</span></a></li>
+      <li><a href="#features"><strong>No cookie, no wall</strong><span>A small corner card, the page stays usable</span></a></li>
+      <li><a href="#dnt"><strong>Do Not Track, GPC</strong><span>The browser's signal is a refusal</span></a></li>
+      <li><a href="#purposes"><strong>By purpose</strong><span>Audience, videos, ads: never a list of cookies</span></a></li>
+      <li><a href="#any-site"><strong>Any site</strong><span>npm, CDN, two tags</span></a></li>
+      <li><a href="#wordpress"><strong>WordPress</strong><span>Settings page, privacy policy text</span></a></li>
+    </ul>
+
+    <aside class="support" aria-label="Support the project">
+      <svg class="support__cup" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/><path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/></svg>
+      <p><strong>No Thanks is free and open source.</strong> If it lightens your pages, you can support its development with a coffee on Ko-fi.</p>
+      <a class="btn support__btn" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a>
+    </aside>
+
+    <section id="try">
+      <h2>Try it on this page</h2>
+      <p>The banner in the corner is the real one, themed with this site's colors. This page tracks nothing: its three purposes run harmless code that only updates the list below.</p>
+
+      <div class="demo">
+        <div>
+          <p>Blocked code sits in <code>&lt;template data-no-thanks="videos"&gt;</code>. It stays inert until its purpose is allowed, then runs in place.</p>
+          <p>Once the banner is closed, the round button in the corner shows the state and reopens it. Any link to <code>#no-thanks</code> does too. Taking a purpose back clears its cookies and reloads the page.</p>
+          <p>With Do Not Track or Global Privacy Control on, you got a short notice instead, and nothing ran.</p>
+          <div class="actions">
+            <a class="btn primary" href="#no-thanks">Open the banner</a>
+          </div>
+        </div>
+        <div>
+          <p class="runs-head">Blocked code on this page</p>
+          <ul class="runs">
+            <li><strong>Audience measurement</strong><small>data-no-thanks="audience"</small><output id="run-audience">Blocked</output></li>
+            <li><strong>Videos</strong><small>data-no-thanks="videos"</small><output id="run-videos">Blocked</output></li>
+            <li><strong>Advertising</strong><small>data-no-thanks="ads"</small><output id="run-ads">Blocked</output></li>
+          </ul>
+        </div>
+      </div>
+      <template data-no-thanks="audience"><script>ran('audience')</script></template>
+      <template data-no-thanks="videos"><script>ran('videos')</script></template>
+      <template data-no-thanks="ads"><script>ran('ads')</script></template>
+    </section>
+
+    <section id="weight">
+      <h2>What a visitor downloads</h2>
+      <p>For the banner on a first visit, compressed. One request: the WordPress plugin inlines the CSS.</p>
+
+      <table class="weight">
+        <thead><tr><th scope="col">Banner</th><th scope="col"><span class="visually-hidden">Weight</span></th><th scope="col" class="num">KB</th><th scope="col" class="num">Requests</th></tr></thead>
+        <tbody>
+          <tr class="us"><th scope="row">No Thanks</th><td><span class="bar" style="--kb:3.3"></span></td><td class="num"><strong>3.3</strong></td><td class="num">1</td></tr>
+          <tr class="us"><th scope="row">No Thanks, with purposes</th><td><span class="bar" style="--kb:4.1"></span></td><td class="num"><strong>4.1</strong></td><td class="num">1</td></tr>
+          <tr><th scope="row">CookieYes</th><td><span class="bar" style="--kb:32"></span></td><td class="num">32</td><td class="num">9</td></tr>
+          <tr><th scope="row">tarteaucitron.js</th><td><span class="bar" style="--kb:84"></span></td><td class="num">84</td><td class="num">4</td></tr>
+          <tr><th scope="row">Usercentrics</th><td><span class="bar" style="--kb:137"></span></td><td class="num">137</td><td class="num">5</td></tr>
+          <tr><th scope="row">Cookiebot</th><td><span class="bar" style="--kb:163"></span></td><td class="num">163</td><td class="num">4</td></tr>
+          <tr><th scope="row">OneTrust</th><td><span class="bar" style="--kb:209"></span></td><td class="num">209</td><td class="num">13</td></tr>
+          <tr><th scope="row">Didomi</th><td><span class="bar" style="--kb:210"></span></td><td class="num">210</td><td class="num">3</td></tr>
+          <tr><th scope="row">Axeptio</th><td><span class="bar" style="--kb:290"></span></td><td class="num">290</td><td class="num">9</td></tr>
+        </tbody>
+      </table>
+      <p class="small">No Thanks: the <code>dist/</code> files, JS + CSS, gzipped. The others as their vendors run them on their own site, measured on 24 November 2026 from France: every request to the CMP's own domains, in the compressed bytes a browser gets. A site's own setup moves these figures. Self-hosted libraries for reference: CookieConsent v3 ≈ 16 KB, Complianz (WordPress) ≈ 15 KB, Klaro ≈ 67 KB.</p>
+    </section>
+
+    <section id="features">
+      <h2>How it behaves</h2>
+      <p>Built on a native <code>&lt;dialog&gt;</code>, shown non-modal: no cookie wall, the page stays usable.</p>
+
+      <article class="feature" id="banner">
+        <div>
+          <div class="tags"><span class="tag">Design</span><span class="tag">Accessibility</span></div>
+          <h3>A small card, two equal buttons</h3>
+          <p>A 340 px card in a corner: a title, the message with an optional « Learn more » link, then « No thanks » and « OK » side by side, same size, same weight.</p>
+          <ul>
+            <li>On a first visit it never takes the focus. Reopened from a link it does, and <kbd>Escape</kbd> closes it.</li>
+            <li>Its buttons are its own, not the theme's. Colors, radius, shadow and offset come from <code>--no-thanks-*</code> custom properties, and every rule is in <code>:where()</code>, so any theme overrides it.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="feature" id="corner">
+        <div>
+          <div class="tags"><span class="tag">Design</span></div>
+          <h3>A corner button to change your mind</h3>
+          <p>Once the banner is closed, a small round button stays in the corner. A green check when everything is allowed, an amber dash when only some purposes are, crossed out otherwise. Its text slides out on hover or focus, and a click reopens the banner.</p>
+        </div>
+      </article>
+
+      <article class="feature" id="dnt">
+        <div>
+          <div class="tags"><span class="tag">Privacy</span><span class="tag auto">Automatic</span></div>
+          <h3>Do Not Track and Global Privacy Control</h3>
+          <p>When the browser sends either signal, it is an answer: nothing runs and no banner asks. On the first visit only, a short notice says so for 6 seconds, then fades out (paused while hovered or focused).</p>
+          <p>An explicit choice still wins: reopened, the banner offers « Allow anyway ».</p>
+        </div>
+      </article>
+
+      <article class="feature" id="purposes">
+        <div>
+          <div class="tags"><span class="tag">Privacy</span></div>
+          <h3>Consent by purpose</h3>
+          <p>Audience, videos, ads: choices are by purpose, never by cookie. That is what the CNIL asks, and a list of cookies only weighs the page and tires the visitor.</p>
+          <ul>
+            <li>One click on « OK » or « No thanks » still decides everything. « Choose » shows one switch per purpose, all off.</li>
+            <li>With a single purpose, the usual case, a smaller build leaves the purpose code out.</li>
+            <li>Allowing one more purpose runs its code at once.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="feature" id="storage">
+        <div>
+          <div class="tags"><span class="tag">Privacy</span></div>
+          <h3>No cookie, and a clean refusal</h3>
+          <p>The choice is kept in <code>localStorage</code> for 6 months, and asked again when the trackers change. Scripts that already ran cannot be unloaded, so refusing after agreeing deletes the trackers' cookies and reloads the page.</p>
+        </div>
+      </article>
+    </section>
+
+    <section id="install">
+      <h2>Install</h2>
+      <p>The same banner, as a WordPress plugin or as two files for any site.</p>
+
+      <article class="feature" id="wordpress">
+        <div>
+          <div class="tags"><span class="tag">WordPress</span></div>
+          <h3>WordPress plugin</h3>
+          <ol class="steps">
+            <li>
+              <p><strong>Install with Composer</strong>, from the author's Composer repository.</p>
+              <pre><code>composer config repositories.cgsoft composer https://corentingautier.dev/composer-repo
+composer require cgsoft/no-thanks</code></pre>
+            </li>
+            <li><p>Activate <strong>No Thanks</strong> in the Plugins screen.</p></li>
+            <li>
+              <p>Fill <strong>Settings › No Thanks</strong>: one block per purpose with the trackers' code as the service gives it, and every text of the banner. Each text has a default in the site language. While the code is empty, nothing is loaded.</p>
+            </li>
+          </ol>
+          <ul>
+            <li><code>&lt;template data-no-thanks="&lt;purpose id&gt;"&gt;</code> anywhere in the site holds code back for a purpose, an embedded video say.</li>
+            <li><code>no_thanks_link()</code> prints the footer link. In a block footer, link to <code>#no-thanks</code>.</li>
+            <li>Settings › Privacy › Policy Guide gets a suggested text listing the purposes and the services found in their code.</li>
+            <li>The <code>no_thanks_config</code> filter changes anything passed to the script.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="feature" id="any-site">
+        <div>
+          <div class="tags"><span class="tag">JavaScript</span></div>
+          <h3>Any site</h3>
+          <p><code>npm install no-thanks.js</code>, or from a CDN: <code>https://cdn.jsdelivr.net/npm/no-thanks.js/dist/no-thanks.js</code> and <code>.css</code>. With several purposes, use <code>no-thanks-purposes.js</code> and <code>.css</code>.</p>
+          <pre><code>&lt;link rel="stylesheet" href="dist/no-thanks.css"&gt;
+&lt;script&gt;
+  window.noThanksConfig = {
+    revision: '1',
+    purposes: [
+      { id: 'audience', label: 'Audience measurement', description: 'Google Analytics' },
+      { id: 'videos', label: 'Videos' },
+    ],
+    texts: { message: 'This site would like to measure its audience. Is that OK?' },
+  };
+&lt;/script&gt;
+&lt;script src="dist/no-thanks.js" defer&gt;&lt;/script&gt;
+
+&lt;template data-no-thanks="audience"&gt;
+  &lt;!-- the tracker's code, as given; no value: needs every purpose --&gt;
+&lt;/template&gt;
+&lt;a href="#no-thanks"&gt;Cookies&lt;/a&gt;</code></pre>
+
+          <dl class="options">
+            <dt>revision</dt><dd>Change it to ask every visitor again.</dd>
+            <dt>maxAge</dt><dd>Days the choice is kept, 182 by default.</dd>
+            <dt>cookies</dt><dd>Cookie name prefixes deleted on refusal.</dd>
+            <dt>privacyUrl</dt><dd>Adds a « Learn more » link after the message.</dd>
+            <dt>purposes</dt><dd><code>[{ id, label, description }]</code>, optional.</dd>
+            <dt>texts</dt><dd>Every text of the banner: <code>message</code> and <code>dnt</code> are HTML, <code>{date}</code> is replaced in the reminders.</dd>
+            <dt>buttonClass</dt><dd>An extra class on the banner's buttons.</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="feature" id="api">
+        <div>
+          <div class="tags"><span class="tag">JavaScript</span></div>
+          <h3>API</h3>
+          <pre><code>noThanks.open();                       // reopens the banner
+noThanks.consent;                      // true when everything is allowed
+noThanks.allows('videos');             // one purpose
+noThanks.set({ videos: true });        // or true / false for everything
+
+document.addEventListener('no-thanks:change', (e) =&gt; {
+  console.log(e.detail.consent, e.detail.purposes);
+});</code></pre>
+          <p>Theming: <code>--no-thanks-bg</code>, <code>-color</code>, <code>-accent</code>, <code>-accent-color</code>, <code>-radius</code>, <code>-shadow</code>, <code>-offset</code>, <code>-ok</code> and <code>-some</code>.</p>
+        </div>
+      </article>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>No Thanks, by <a href="https://corentingautier.dev/">Corentin Gautier</a>. Released under the <a href="https://github.com/corentin-gautier/no-thanks/blob/main/LICENSE" rel="noopener" target="_blank">GPL-3.0</a> license.</span>
+    <span><a href="https://www.npmjs.com/package/no-thanks.js" rel="noopener" target="_blank">npm</a> · <a href="https://github.com/corentin-gautier/no-thanks/issues" rel="noopener" target="_blank">Report an issue</a> · <a href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a></span>
+  </div>
+</footer>
+
+<script>
+  // Run by the blocked templates once their purpose is allowed
+  function ran(id) {
+    const out = document.getElementById('run-' + id);
+    out.textContent = 'Ran';
+    out.className = 'ran';
+  }
+</script>
+</body>
+</html>
