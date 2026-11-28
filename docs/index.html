@@ -72,10 +72,6 @@
   .index a:hover strong { text-decoration: underline 2px var(--accent); text-underline-offset: 0.2em; }
   .index span { color: var(--muted); font-size: var(--t-small); }
 
-  .support { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 2.5rem; padding: 1.25rem 1.5rem; }
-  .support svg { flex: none; }
-  .support p { flex: 1 1 20rem; color: var(--muted); font-size: var(--t-small); }
-  .support strong { color: var(--fg); }
 
   /* Section titles keep their number: the demo banner points to section 01 */
   main { counter-reset: section; }
@@ -205,6 +201,14 @@
     </div>
   </section>
 
+  <aside class="support band grid grid--band" aria-label="Support the project">
+    <div class="support__lead"><svg class="support__cup" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/><path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/></svg><p class="subtitle">Enjoying No Thanks?</p></div>
+    <div class="support__body">
+      <p>No Thanks is free and open source. If it lightens your pages, you can support its development with a coffee on Ko-fi. Thank you!</p>
+      <a class="button" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support me on Ko-fi →</a>
+    </div>
+  </aside>
+
   <div class="grid">
     <ul class="index">
       <li><a href="#weight"><strong>About 3 KB</strong><span>Up to 60 times lighter than the usual CMPs</span></a></li>
@@ -215,11 +219,6 @@
       <li><a href="#wordpress"><strong>WordPress</strong><span>Settings page, privacy policy text</span></a></li>
     </ul>
 
-    <aside class="support frame" aria-label="Support the project">
-      <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/><path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/></svg>
-      <p><strong>No Thanks is free and open source.</strong> If it lightens your pages, you can support its development with a coffee on Ko-fi.</p>
-      <a class="button button--ghost" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a>
-    </aside>
   </div>
 
   <section id="try" class="section grid">
