@@ -10,7 +10,7 @@ The project site, published by GitHub Pages at https://corentingautier.dev/no-th
 ## Styling
 
 - Built on the shared design system (portfolio repo, `design-system/`): `https://corentingautier.dev/design-system/ds.css` is linked first, then the page's own `<style>`, which only holds what is specific to this site (code blocks, hero, highlights, Ko-fi box, demo list, weight table, steps, options list, the banner's theme). Dark only.
-- `lines.js` from the same place draws the hero waves, one section rule and the row signs.
+- `lines.js` from the same place draws one section rule and the row signs (the hero waves are kept for the portfolio).
 - Layout as on the portfolio: 12-column grid, `.sec-head` per section (numbered: the demo banner's text points to « section 01 »), secondary content on the column 7 axis, features and install as `.rows` with `.chips`.
 
 ## Live demo
