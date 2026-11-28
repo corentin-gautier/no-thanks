@@ -65,13 +65,12 @@
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.75rem; }
 
   /* Highlights: six links, three per row on desktop */
-  .index { display: grid; grid-template-columns: subgrid; }
+  .index { display: grid; grid-template-columns: subgrid; margin-top: clamp(3rem, calc(6 * var(--vw)), 5rem); }
   .index > li { grid-column: span 12; border-top: 1px solid var(--line); }
   .index a { display: block; height: 100%; padding-block: 1rem 1.1rem; text-decoration: none; }
   .index strong { display: block; font-weight: 650; }
   .index a:hover strong { text-decoration: underline 2px var(--accent); text-underline-offset: 0.2em; }
   .index span { color: var(--muted); font-size: var(--t-small); }
-
 
   /* Section titles keep their number: the demo banner points to section 01 */
   main { counter-reset: section; }
@@ -199,6 +198,15 @@
         <a class="button button--ghost" href="#try">Try the banner</a>
       </div>
     </div>
+
+    <ul class="index">
+      <li><a href="#weight"><strong>About 3 KB</strong><span>Up to 60 times lighter than the usual CMPs</span></a></li>
+      <li><a href="#features"><strong>No cookie, no wall</strong><span>A small corner card, the page stays usable</span></a></li>
+      <li><a href="#dnt"><strong>Do Not Track, GPC</strong><span>The browser's signal is a refusal</span></a></li>
+      <li><a href="#purposes"><strong>By purpose</strong><span>Audience, videos, ads: never a list of cookies</span></a></li>
+      <li><a href="#any-site"><strong>Any site</strong><span>npm, CDN, two tags</span></a></li>
+      <li><a href="#wordpress"><strong>WordPress</strong><span>Settings page, privacy policy text</span></a></li>
+    </ul>
   </section>
 
   <aside class="support band grid grid--band" aria-label="Support the project">
@@ -208,18 +216,6 @@
       <a class="button" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support me on Ko-fi →</a>
     </div>
   </aside>
-
-  <div class="grid">
-    <ul class="index">
-      <li><a href="#weight"><strong>About 3 KB</strong><span>Up to 60 times lighter than the usual CMPs</span></a></li>
-      <li><a href="#features"><strong>No cookie, no wall</strong><span>A small corner card, the page stays usable</span></a></li>
-      <li><a href="#dnt"><strong>Do Not Track, GPC</strong><span>The browser's signal is a refusal</span></a></li>
-      <li><a href="#purposes"><strong>By purpose</strong><span>Audience, videos, ads: never a list of cookies</span></a></li>
-      <li><a href="#any-site"><strong>Any site</strong><span>npm, CDN, two tags</span></a></li>
-      <li><a href="#wordpress"><strong>WordPress</strong><span>Settings page, privacy policy text</span></a></li>
-    </ul>
-
-  </div>
 
   <section id="try" class="section grid">
     <div class="sec-head">
