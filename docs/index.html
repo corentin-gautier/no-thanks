@@ -7,6 +7,8 @@
 <meta name="description" content="Free, open source cookie consent banner: about 3 KB gzipped, no dependency, no cookie. Respects Do Not Track and Global Privacy Control. JavaScript library and WordPress plugin.">
 <meta name="author" content="Corentin Gautier">
 <link rel="canonical" href="https://corentingautier.dev/no-thanks/">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#111110">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="No Thanks">
 <meta property="og:title" content="No Thanks: an ultra-light cookie consent banner">
@@ -17,8 +19,6 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="No Thanks: a consent banner that weighs 3 KB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f4f3ee" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e0f0c" media="(prefers-color-scheme: dark)">
 <meta name="google-site-verification" content="ZzQ0D93tWYmlaJGBHx_q1Hk4xZMRt_zgjYe9ATnlUfM" />
 <script type="application/ld+json">
 {
@@ -45,155 +45,102 @@
   ]
 }
 </script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c8f031'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23111210'/%3E%3Cpath d='M10 22 22 10' stroke='%23c8f031' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c8f031'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23111110'/%3E%3Cpath d='M10 22 22 10' stroke='%23c8f031' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://corentingautier.dev/design-system/ds.css">
 <style>
-  :root {
-    --bg: #f4f3ee;
-    --surface: #fbfaf6;
-    --text: #111210;
-    --muted: #55584f;
-    --border: #c9c9be;
-    --accent: #c8f031;
-    --on-accent: #111210;
-    --accent-text: #3f6212;
-    --code-bg: #e8e7df;
-    --screen: #111210;
-    --marker: linear-gradient(transparent 60%, var(--accent) 60% 92%, transparent 92%);
-    --marker-ink: currentColor;
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --rule: 1.5px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0e0f0c;
-      --surface: #171914;
-      --text: #eeefe6;
-      --muted: #a4a798;
-      --border: #33352d;
-      --accent-text: #c8f031;
-      --code-bg: #1f211b;
-      --screen: #191b15;
-      --marker: none;
-      --marker-ink: var(--accent);
-    }
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 16px/1.6 var(--sans);
-  }
-  a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-  a:hover { background: var(--accent); color: var(--on-accent); }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  /* This site's own pieces, on top of the shared design system (ds.css) */
 
-  header.top { border-bottom: var(--rule) solid var(--text); }
-  header.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-block: 14px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; text-decoration: none; }
-  .brand:hover { background: none; color: inherit; }
-  .brand svg { flex-shrink: 0; }
-  nav { display: flex; gap: 18px; font: 13px var(--mono); }
-  nav a { text-decoration: none; }
+  /* Inline code and the code blocks */
+  :not(pre) > code, kbd { padding: 0.1em 0.3em; border: 1px solid var(--line); border-radius: 3px; overflow-wrap: anywhere; }
+  pre { overflow-x: auto; padding: 1rem 1.1rem; border: 1px solid var(--line); background: var(--band); line-height: 1.5; }
+  pre code { font-size: 0.8125rem; }
 
-  .hero { padding: clamp(48px, 9vw, 96px) 0 56px; }
-  .hero h1 { margin: 0 0 24px; font-size: clamp(38px, 7.4vw, 76px); font-weight: 700; line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; }
-  .hero h1 em { background: var(--marker); color: var(--marker-ink); font-style: normal; font-weight: 300; }
-  .hero p { margin: 0 0 32px; max-width: 60ch; font-size: 19px; line-height: 1.5; color: var(--muted); text-wrap: pretty; }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
-  .btn { display: inline-block; padding: 13px 22px; border: var(--rule) solid var(--text); background: none; color: var(--text); font: 600 16px/1.2 var(--sans); text-decoration: none; cursor: pointer; }
-  .btn::after { content: " →"; content: " →" / ""; font-family: var(--mono); }
-  .btn.primary { background: var(--text); color: var(--bg); }
-  .btn:hover, .btn.primary:hover { background: var(--accent); color: var(--on-accent); }
+  /* Hero: waves behind the title, the text on the column 7 axis */
+  .hero { position: relative; padding-top: clamp(3rem, calc(6.7 * var(--vw)), 6rem); }
+  .hero__waves { position: absolute; top: 2.5rem; right: 0; width: min(54%, 45rem); height: auto; aspect-ratio: 720 / 500; }
+  .hero > :not(svg) { position: relative; }
+  .hero__title { margin-top: 1.25rem; }
+  .hero__title > span { display: block; }
+  .hero__facts { margin-top: clamp(2.5rem, calc(5 * var(--vw)), 4.5rem); }
+  .hero__text { margin-top: 2rem; font-size: 1.2rem; line-height: 1.5; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.75rem; }
 
-  .index { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--rule); margin: 0; padding: var(--rule); list-style: none; background: var(--text); }
-  .index a { display: block; height: 100%; padding: 16px 18px; background: var(--bg); color: inherit; text-decoration: none; }
-  .index a:hover { background: var(--accent); color: var(--on-accent); }
-  .index strong { display: block; letter-spacing: -0.01em; }
-  .index span { font-size: 14px; color: var(--muted); }
-  .index a:hover span { color: inherit; }
+  /* Highlights: six links, three per row on desktop */
+  .index { display: grid; grid-template-columns: subgrid; }
+  .index > li { grid-column: span 12; border-top: 1px solid var(--line); }
+  .index a { display: block; height: 100%; padding-block: 1rem 1.1rem; text-decoration: none; }
+  .index strong { display: block; font-weight: 650; }
+  .index a:hover strong { text-decoration: underline 2px var(--accent); text-underline-offset: 0.2em; }
+  .index span { color: var(--muted); font-size: var(--t-small); }
 
+  .support { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 2.5rem; padding: 1.25rem 1.5rem; }
+  .support svg { flex: none; }
+  .support p { flex: 1 1 20rem; color: var(--muted); font-size: var(--t-small); }
+  .support strong { color: var(--fg); }
+
+  /* Section titles keep their number: the demo banner points to section 01 */
   main { counter-reset: section; }
-  section { padding: 72px 0 0; counter-increment: section; scroll-margin-top: 16px; }
-  h2 { margin: 0 0 12px; font-size: clamp(30px, 4.8vw, 46px); font-weight: 700; line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
-  h2::before { content: counter(section, decimal-leading-zero); content: counter(section, decimal-leading-zero) / ""; display: block; margin-bottom: 18px; color: var(--accent-text); font: 500 13px/1 var(--mono); letter-spacing: 0.08em; }
-  h2 + p { margin-top: 0; color: var(--muted); font-size: 18px; max-width: 62ch; }
-  h3 { margin: 12px 0 8px; font-size: 24px; line-height: 1.15; letter-spacing: -0.03em; }
+  .sec-head .section-title { counter-increment: section; }
+  .sec-head .section-title::before { content: counter(section, decimal-leading-zero); content: counter(section, decimal-leading-zero) / ""; display: block; margin-bottom: 1rem; color: var(--accent); font: 500 var(--t-tag)/1 var(--mono); letter-spacing: 0.08em; }
 
-  .feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: start; padding: 32px 0; border-top: var(--rule) solid var(--text); }
-  .feature:first-of-type { margin-top: 32px; }
-  .feature p, .feature ul { margin: 0 0 12px; max-width: 62ch; }
-  .feature ul { padding-left: 20px; }
-  .feature li { margin-bottom: 6px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
-  .tag { padding: 2px 8px; border: 1px solid currentColor; }
-  .tag.auto { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-  .where { font: 13px/1.5 var(--mono); color: var(--muted); }
-
-  code, kbd { font: 0.875em/1.5 var(--mono); }
-  :not(pre) > code, kbd { padding: 2px 5px; background: var(--code-bg); overflow-wrap: anywhere; }
-  pre { margin: 0 0 12px; padding: 16px 18px; background: var(--screen); color: #eeefe6; overflow-x: auto; }
-  pre code { font-size: 13.5px; }
-
-  /* Live demo */
-  .demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 32px; padding-top: 32px; border-top: var(--rule) solid var(--text); }
-  .demo p { margin: 0 0 12px; max-width: 62ch; }
-  .demo .actions { margin-top: 20px; }
-  .runs { margin: 0; padding: var(--rule); list-style: none; background: var(--text); display: grid; gap: var(--rule); }
-  .runs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 14px 18px; background: var(--bg); }
-  .runs small { grid-column: 1; color: var(--muted); font-size: 14px; }
-  .runs output { grid-row: 1 / 3; grid-column: 2; padding: 2px 8px; border: 1px solid currentColor; font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+  /* Live demo: what the blocked code did */
+  .runs > li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1rem; align-items: center; }
+  .runs small { grid-column: 1; font: var(--t-tag)/1.5 var(--mono); }
+  .runs output { grid-row: 1 / 3; grid-column: 2; padding: 0.3rem 0.45rem 0.25rem; border: 1px solid var(--line-strong); border-radius: 3px; color: var(--fg); font: 500 0.6875rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
   .runs output.ran { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-  .runs-head { margin: 0 0 8px; font: 13px/1.5 var(--mono); color: var(--muted); }
+  .runs-head { margin-bottom: 0.75rem; }
+  .demo__text p + p { margin-top: 1rem; }
 
   /* The banner, themed with the site's colors */
-  .no-thanks { --no-thanks-bg: var(--surface); --no-thanks-color: var(--text); --no-thanks-accent: var(--text); --no-thanks-accent-color: var(--bg); --no-thanks-radius: 0; --no-thanks-ok: #65a30d; }
-  .no-thanks, .no-thanks-toggle { border: var(--rule) solid var(--text); }
+  .no-thanks { --no-thanks-bg: var(--band); --no-thanks-color: var(--fg); --no-thanks-accent: var(--accent); --no-thanks-accent-color: var(--on-accent); --no-thanks-radius: 3px; --no-thanks-ok: var(--accent); --no-thanks-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.45); }
+  .no-thanks, .no-thanks-toggle { border: 1px solid var(--line-strong); }
 
   /* Weight */
-  .weight { width: 100%; margin-top: 32px; border-collapse: collapse; font-size: 15px; }
-  .weight th, .weight td { padding: 10px 0; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
-  .weight thead th { border-bottom: var(--rule) solid var(--text); font: 500 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .weight td.num { width: 70px; padding-left: 12px; font-family: var(--mono); text-align: right; white-space: nowrap; }
-  .weight th[scope="row"] { width: 210px; padding-right: 16px; font-weight: 400; }
-  .weight .bar { display: block; height: 14px; min-width: 3px; width: calc(var(--kb) / 290 * 100%); background: var(--border); }
-  .weight tr.us th { font-weight: 700; }
-  .weight tr.us .bar { background: var(--accent); outline: 1px solid var(--text); }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .small { margin: 16px 0 0; max-width: 70ch; font-size: 14px; color: var(--muted); }
+  .weight { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  .weight th, .weight td { padding: 0.65rem 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+  .weight thead th { border-bottom-color: var(--line-strong); color: var(--muted); font: 500 var(--t-tag) var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+  .weight td.num { width: 5rem; padding-left: 0.75rem; font-family: var(--mono); text-align: right; white-space: nowrap; }
+  .weight th[scope="row"] { width: 14rem; padding-right: 1rem; font-weight: 400; }
+  .weight .bar { display: block; height: 0.875rem; min-width: 3px; width: calc(var(--kb) / 290 * 100%); background: var(--line-strong); }
+  .weight tr.us th { font-weight: 650; }
+  .weight tr.us .bar { background: var(--accent); }
+  .weight__note { margin-top: 1.5rem; }
 
-  .steps { margin: 32px 0 0; padding: 0; list-style: none; counter-reset: step; }
-  .steps > li { position: relative; padding: 0 0 20px 48px; counter-increment: step; }
-  .steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; background: var(--accent); color: var(--on-accent); font: 600 13px/28px var(--mono); text-align: center; }
-  .steps p { margin: 0 0 10px; }
-  .note { margin: 0; padding: 14px 16px; border-left: 4px solid var(--accent); background: var(--surface); }
+  /* Features and install: lists inside the rows */
+  .row__body ul:not(.chips) { margin-top: 0.75rem; padding-left: 1.1rem; color: var(--muted); font-size: var(--t-small); list-style: square; }
+  .row__body li + li { margin-top: 0.4rem; }
+  .row__body li::marker { color: var(--accent); }
+  .row__body pre { margin-top: 0.75rem; }
+  .row__body .steps { padding: 0; list-style: none; counter-reset: step; }
+  .chips .on { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 
-  dl.options { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 24px; margin: 24px 0 0; }
+  .steps > li { position: relative; padding-left: 2.75rem; counter-increment: step; }
+  .steps > li + li { margin-top: 1rem; }
+  .steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 1.75rem; height: 1.75rem; border: 1px solid var(--line-strong); border-radius: 3px; color: var(--fg); font: 500 0.8125rem/1.75rem var(--mono); text-align: center; }
+  .steps strong { color: var(--fg); }
+
+  dl.options { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.5rem 1.5rem; margin: 1.5rem 0 0; font-size: var(--t-small); }
   dl.options dt { font: 0.875em/1.7 var(--mono); }
   dl.options dd { margin: 0; color: var(--muted); }
 
-  .support { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px 24px; align-items: center; margin: 40px 0 0; padding: 20px 24px; background: var(--accent); color: var(--on-accent); }
-  .support p { margin: 0; max-width: 60ch; }
-  .support a:not(.btn):hover { background: var(--on-accent); color: var(--accent); }
-  .support .btn { border-color: var(--on-accent); background: var(--on-accent); color: var(--accent); white-space: nowrap; }
-  .support .btn:hover { background: none; color: var(--on-accent); }
-  .support .btn:focus-visible { outline-color: var(--on-accent); }
+  @media (min-width: 48rem) {
+    .index > li { grid-column: span 6; }
+  }
 
-  footer { margin-top: 80px; padding: 24px 0 40px; border-top: var(--rule) solid var(--text); font: 12.5px/1.6 var(--mono); color: var(--muted); }
-  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  @media (min-width: 62rem) {
+    .index > li { grid-column: span 4; }
+    .hero__facts { grid-column: 1 / 7; }
+    .hero__text { grid-column: 7 / 12; margin-top: clamp(2.5rem, calc(5 * var(--vw)), 4.5rem); }
+    .weight__note { grid-column: 7 / 12; }
+    .install .row__body { grid-column: 7 / -1; }
+    .rows > li { align-items: start; }
+  }
 
-  @media (max-width: 720px) {
-    nav a.hide-sm { display: none; }
-    .demo { grid-template-columns: minmax(0, 1fr); }
-    .weight th[scope="row"] { width: 130px; }
-    dl.options { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-    dl.options dd { margin-bottom: 10px; }
-    .support { grid-template-columns: auto minmax(0, 1fr); }
-    .support__btn { grid-column: 1 / -1; justify-self: start; }
+  @media (max-width: 47.99rem) {
+    .weight th[scope="row"] { width: 8.5rem; }
+    .weight td.num { width: 3.25rem; padding-left: 0.5rem; }
+    dl.options { grid-template-columns: minmax(0, 1fr); gap: 0.125rem; }
+    dl.options dd { margin-bottom: 0.6rem; }
   }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/no-thanks.js@0/dist/no-thanks-purposes.css">
@@ -215,35 +162,52 @@
 <script src="https://cdn.jsdelivr.net/npm/no-thanks.js@0/dist/no-thanks-purposes.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#top">Skip to content</a>
 
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="#top">
-      <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#c8f031"/><circle cx="16" cy="16" r="9" fill="#111210"/><path d="M10 22 22 10" stroke="#c8f031" stroke-width="2.5"/></svg>
-      No Thanks
-    </a>
-    <nav aria-label="Main">
-      <a class="hide-sm" href="#try">Demo</a>
-      <a class="hide-sm" href="#weight">Weight</a>
-      <a class="hide-sm" href="#install">Install</a>
-      <a href="https://github.com/corentin-gautier/no-thanks/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a>
-      <a href="https://github.com/corentin-gautier/no-thanks" rel="noopener" target="_blank">GitHub</a>
-    </nav>
-  </div>
+<header class="site-header grid grid--band">
+  <a class="wordmark" href="#top">
+    <span class="wordmark__mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="28" height="28"><circle cx="16" cy="16" r="9" fill="currentColor"/><path d="M10 22 22 10" stroke="var(--accent)" stroke-width="2.5"/></svg>
+    </span>
+    <span>No Thanks</span>
+  </a>
+  <nav aria-label="Main">
+    <ul class="nav">
+      <li><a href="#try">Demo</a></li>
+      <li><a href="#weight">Weight</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="https://github.com/corentin-gautier/no-thanks/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a></li>
+    </ul>
+  </nav>
+  <p class="site-header__end small"><a href="https://github.com/corentin-gautier/no-thanks" rel="noopener" target="_blank">GitHub</a></p>
 </header>
 
 <main id="top">
-  <div class="wrap">
 
-    <div class="hero">
-      <h1>A cookie consent banner that weighs <em>3&nbsp;KB</em></h1>
+  <section class="hero section grid">
+    <svg class="hero__waves" data-waves></svg>
+    <p class="tag">Free and open source · JavaScript library · WordPress plugin</p>
+    <h1 class="hero__title display">
+      <span>A cookie <span class="voice-design">consent</span></span>
+      <span>banner that weighs</span>
+      <span><span class="mark">3&nbsp;KB</span></span>
+    </h1>
+    <ul class="hero__facts facts">
+      <li><span class="tag">gzipped, CSS included</span><strong>3.3 KB</strong></li>
+      <li><span class="tag">dependencies</span><strong>0</strong></li>
+      <li><span class="tag">license</span><strong>GPL-3.0</strong></li>
+    </ul>
+    <div class="hero__text">
       <p>No Thanks is a free, open source consent banner: about 3.3 KB gzipped with its CSS, no dependency, and no cookie of its own. Do Not Track and Global Privacy Control count as a refusal. « No thanks » and « OK » weigh the same. For any site, or as a WordPress plugin.</p>
       <div class="actions">
-        <a class="btn primary" href="#install">Install</a>
-        <a class="btn" href="#try">Try the banner</a>
+        <a class="button" href="#install">Install</a>
+        <a class="button button--ghost" href="#try">Try the banner</a>
       </div>
     </div>
+  </section>
 
+  <div class="grid">
     <ul class="index">
       <li><a href="#weight"><strong>About 3 KB</strong><span>Up to 60 times lighter than the usual CMPs</span></a></li>
       <li><a href="#features"><strong>No cookie, no wall</strong><span>A small corner card, the page stays usable</span></a></li>
@@ -253,97 +217,105 @@
       <li><a href="#wordpress"><strong>WordPress</strong><span>Settings page, privacy policy text</span></a></li>
     </ul>
 
-    <aside class="support" aria-label="Support the project">
-      <svg class="support__cup" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/><path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/></svg>
+    <aside class="support frame" aria-label="Support the project">
+      <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/><path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/></svg>
       <p><strong>No Thanks is free and open source.</strong> If it lightens your pages, you can support its development with a coffee on Ko-fi.</p>
-      <a class="btn support__btn" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a>
+      <a class="button button--ghost" href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a>
     </aside>
+  </div>
 
-    <section id="try">
-      <h2>Try it on this page</h2>
+  <section id="try" class="section grid">
+    <div class="sec-head">
+      <h2 class="section-title">Try it on this page</h2>
       <p>The banner in the corner is the real one, themed with this site's colors. This page tracks nothing: its three purposes run harmless code that only updates the list below.</p>
+    </div>
 
-      <div class="demo">
-        <div>
-          <p>Blocked code sits in <code>&lt;template data-no-thanks="videos"&gt;</code>. It stays inert until its purpose is allowed, then runs in place.</p>
-          <p>Once the banner is closed, the round button in the corner shows the state and reopens it. Any link to <code>#no-thanks</code> does too. Taking a purpose back clears its cookies and reloads the page.</p>
-          <p>With Do Not Track or Global Privacy Control on, you got a short notice instead, and nothing ran.</p>
-          <div class="actions">
-            <a class="btn primary" href="#no-thanks">Open the banner</a>
-          </div>
-        </div>
-        <div>
-          <p class="runs-head">Blocked code on this page</p>
-          <ul class="runs">
-            <li><strong>Audience measurement</strong><small>data-no-thanks="audience"</small><output id="run-audience">Blocked</output></li>
-            <li><strong>Videos</strong><small>data-no-thanks="videos"</small><output id="run-videos">Blocked</output></li>
-            <li><strong>Advertising</strong><small>data-no-thanks="ads"</small><output id="run-ads">Blocked</output></li>
-          </ul>
+    <div class="split">
+      <div class="demo__text">
+        <p>Blocked code sits in <code>&lt;template data-no-thanks="videos"&gt;</code>. It stays inert until its purpose is allowed, then runs in place.</p>
+        <p>Once the banner is closed, the round button in the corner shows the state and reopens it. Any link to <code>#no-thanks</code> does too. Taking a purpose back clears its cookies and reloads the page.</p>
+        <p>With Do Not Track or Global Privacy Control on, you got a short notice instead, and nothing ran.</p>
+        <div class="actions">
+          <a class="button" href="#no-thanks">Open the banner</a>
         </div>
       </div>
-      <template data-no-thanks="audience"><script>ran('audience')</script></template>
-      <template data-no-thanks="videos"><script>ran('videos')</script></template>
-      <template data-no-thanks="ads"><script>ran('ads')</script></template>
-    </section>
+      <div>
+        <p class="runs-head tag">Blocked code on this page</p>
+        <ul class="runs list">
+          <li><strong>Audience measurement</strong><small>data-no-thanks="audience"</small><output id="run-audience">Blocked</output></li>
+          <li><strong>Videos</strong><small>data-no-thanks="videos"</small><output id="run-videos">Blocked</output></li>
+          <li><strong>Advertising</strong><small>data-no-thanks="ads"</small><output id="run-ads">Blocked</output></li>
+        </ul>
+      </div>
+    </div>
+    <template data-no-thanks="audience"><script>ran('audience')</script></template>
+    <template data-no-thanks="videos"><script>ran('videos')</script></template>
+    <template data-no-thanks="ads"><script>ran('ads')</script></template>
+  </section>
 
-    <section id="weight">
-      <h2>What a visitor downloads</h2>
+  <section id="weight" class="section band grid grid--band">
+    <div class="sec-head">
+      <h2 class="section-title">What a visitor downloads</h2>
       <p>For the banner on a first visit, compressed. One request: the WordPress plugin inlines the CSS.</p>
+    </div>
 
-      <table class="weight">
-        <thead><tr><th scope="col">Banner</th><th scope="col"><span class="visually-hidden">Weight</span></th><th scope="col" class="num">KB</th><th scope="col" class="num">Requests</th></tr></thead>
-        <tbody>
-          <tr class="us"><th scope="row">No Thanks</th><td><span class="bar" style="--kb:3.3"></span></td><td class="num"><strong>3.3</strong></td><td class="num">1</td></tr>
-          <tr class="us"><th scope="row">No Thanks, with purposes</th><td><span class="bar" style="--kb:4.1"></span></td><td class="num"><strong>4.1</strong></td><td class="num">1</td></tr>
-          <tr><th scope="row">CookieYes</th><td><span class="bar" style="--kb:32"></span></td><td class="num">32</td><td class="num">9</td></tr>
-          <tr><th scope="row">tarteaucitron.js</th><td><span class="bar" style="--kb:84"></span></td><td class="num">84</td><td class="num">4</td></tr>
-          <tr><th scope="row">Usercentrics</th><td><span class="bar" style="--kb:137"></span></td><td class="num">137</td><td class="num">5</td></tr>
-          <tr><th scope="row">Cookiebot</th><td><span class="bar" style="--kb:163"></span></td><td class="num">163</td><td class="num">4</td></tr>
-          <tr><th scope="row">OneTrust</th><td><span class="bar" style="--kb:209"></span></td><td class="num">209</td><td class="num">13</td></tr>
-          <tr><th scope="row">Didomi</th><td><span class="bar" style="--kb:210"></span></td><td class="num">210</td><td class="num">3</td></tr>
-          <tr><th scope="row">Axeptio</th><td><span class="bar" style="--kb:290"></span></td><td class="num">290</td><td class="num">9</td></tr>
-        </tbody>
-      </table>
-      <p class="small">No Thanks: the <code>dist/</code> files, JS + CSS, gzipped. The others as their vendors run them on their own site, measured on 24 November 2026 from France: every request to the CMP's own domains, in the compressed bytes a browser gets. A site's own setup moves these figures. Self-hosted libraries for reference: CookieConsent v3 ≈ 16 KB, Complianz (WordPress) ≈ 15 KB, Klaro ≈ 67 KB.</p>
-    </section>
+    <table class="weight">
+      <thead><tr><th scope="col">Banner</th><th scope="col"><span class="visually-hidden">Weight</span></th><th scope="col" class="num">KB</th><th scope="col" class="num">Requests</th></tr></thead>
+      <tbody>
+        <tr class="us"><th scope="row">No Thanks</th><td><span class="bar" style="--kb:3.3"></span></td><td class="num"><strong>3.3</strong></td><td class="num">1</td></tr>
+        <tr class="us"><th scope="row">No Thanks, with purposes</th><td><span class="bar" style="--kb:4.1"></span></td><td class="num"><strong>4.1</strong></td><td class="num">1</td></tr>
+        <tr><th scope="row">CookieYes</th><td><span class="bar" style="--kb:32"></span></td><td class="num">32</td><td class="num">9</td></tr>
+        <tr><th scope="row">tarteaucitron.js</th><td><span class="bar" style="--kb:84"></span></td><td class="num">84</td><td class="num">4</td></tr>
+        <tr><th scope="row">Usercentrics</th><td><span class="bar" style="--kb:137"></span></td><td class="num">137</td><td class="num">5</td></tr>
+        <tr><th scope="row">Cookiebot</th><td><span class="bar" style="--kb:163"></span></td><td class="num">163</td><td class="num">4</td></tr>
+        <tr><th scope="row">OneTrust</th><td><span class="bar" style="--kb:209"></span></td><td class="num">209</td><td class="num">13</td></tr>
+        <tr><th scope="row">Didomi</th><td><span class="bar" style="--kb:210"></span></td><td class="num">210</td><td class="num">3</td></tr>
+        <tr><th scope="row">Axeptio</th><td><span class="bar" style="--kb:290"></span></td><td class="num">290</td><td class="num">9</td></tr>
+      </tbody>
+    </table>
+    <p class="weight__note small muted">No Thanks: the <code>dist/</code> files, JS + CSS, gzipped. The others as their vendors run them on their own site, measured on 24 November 2026 from France: every request to the CMP's own domains, in the compressed bytes a browser gets. A site's own setup moves these figures. Self-hosted libraries for reference: CookieConsent v3 ≈ 16 KB, Complianz (WordPress) ≈ 15 KB, Klaro ≈ 67 KB.</p>
+  </section>
 
-    <section id="features">
-      <h2>How it behaves</h2>
+  <section id="features" class="section grid">
+    <div class="sec-head">
+      <h2 class="section-title">How it behaves</h2>
       <p>Built on a native <code>&lt;dialog&gt;</code>, shown non-modal: no cookie wall, the page stays usable.</p>
+    </div>
 
-      <article class="feature" id="banner">
-        <div>
-          <div class="tags"><span class="tag">Design</span><span class="tag">Accessibility</span></div>
-          <h3>A small card, two equal buttons</h3>
+    <ul class="rows">
+      <li id="banner">
+        <div class="row__head"><svg width="64" height="64" data-sign="design"></svg><h3 class="row__title">A small card, two equal buttons</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>Design</li><li>Accessibility</li></ul>
           <p>A 340 px card in a corner: a title, the message with an optional « Learn more » link, then « No thanks » and « OK » side by side, same size, same weight.</p>
           <ul>
             <li>On a first visit it never takes the focus. Reopened from a link it does, and <kbd>Escape</kbd> closes it.</li>
             <li>Its buttons are its own, not the theme's. Colors, radius, shadow and offset come from <code>--no-thanks-*</code> custom properties, and every rule is in <code>:where()</code>, so any theme overrides it.</li>
           </ul>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="corner">
-        <div>
-          <div class="tags"><span class="tag">Design</span></div>
-          <h3>A corner button to change your mind</h3>
+      <li id="corner">
+        <div class="row__head"><svg width="64" height="64" data-sign="ripple"></svg><h3 class="row__title">A corner button to change your mind</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>Design</li></ul>
           <p>Once the banner is closed, a small round button stays in the corner. A green check when everything is allowed, an amber dash when only some purposes are, crossed out otherwise. Its text slides out on hover or focus, and a click reopens the banner.</p>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="dnt">
-        <div>
-          <div class="tags"><span class="tag">Privacy</span><span class="tag auto">Automatic</span></div>
-          <h3>Do Not Track and Global Privacy Control</h3>
+      <li id="dnt">
+        <div class="row__head"><svg width="64" height="64" data-sign="hexagon"></svg><h3 class="row__title">Do Not Track and Global Privacy Control</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>Privacy</li><li class="on">Automatic</li></ul>
           <p>When the browser sends either signal, it is an answer: nothing runs and no banner asks. On the first visit only, a short notice says so for 6 seconds, then fades out (paused while hovered or focused).</p>
           <p>An explicit choice still wins: reopened, the banner offers « Allow anyway ».</p>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="purposes">
-        <div>
-          <div class="tags"><span class="tag">Privacy</span></div>
-          <h3>Consent by purpose</h3>
+      <li id="purposes">
+        <div class="row__head"><svg width="64" height="64" data-sign="diamond"></svg><h3 class="row__title">Consent by purpose</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>Privacy</li></ul>
           <p>Audience, videos, ads: choices are by purpose, never by cookie. That is what the CNIL asks, and a list of cookies only weighs the page and tires the visitor.</p>
           <ul>
             <li>One click on « OK » or « No thanks » still decides everything. « Choose » shows one switch per purpose, all off.</li>
@@ -351,25 +323,31 @@
             <li>Allowing one more purpose runs its code at once.</li>
           </ul>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="storage">
-        <div>
-          <div class="tags"><span class="tag">Privacy</span></div>
-          <h3>No cookie, and a clean refusal</h3>
+      <li id="storage">
+        <div class="row__head"><svg width="64" height="64" data-sign="leaf"></svg><h3 class="row__title">No cookie, and a clean refusal</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>Privacy</li></ul>
           <p>The choice is kept in <code>localStorage</code> for 6 months, and asked again when the trackers change. Scripts that already ran cannot be unloaded, so refusing after agreeing deletes the trackers' cookies and reloads the page.</p>
         </div>
-      </article>
-    </section>
+      </li>
+    </ul>
+  </section>
 
-    <section id="install">
-      <h2>Install</h2>
+  <div class="grid"><svg class="rule" data-rule></svg></div>
+
+  <section id="install" class="install section grid">
+    <div class="sec-head">
+      <h2 class="section-title">Install</h2>
       <p>The same banner, as a WordPress plugin or as two files for any site.</p>
+    </div>
 
-      <article class="feature" id="wordpress">
-        <div>
-          <div class="tags"><span class="tag">WordPress</span></div>
-          <h3>WordPress plugin</h3>
+    <ul class="rows">
+      <li id="wordpress">
+        <div class="row__head"><svg width="64" height="64" data-sign="wordpress"></svg><h3 class="row__title">WordPress plugin</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>WordPress</li></ul>
           <ol class="steps">
             <li>
               <p><strong>Install with Composer</strong>, from the author's Composer repository.</p>
@@ -388,12 +366,12 @@ composer require cgsoft/no-thanks</code></pre>
             <li>The <code>no_thanks_config</code> filter changes anything passed to the script.</li>
           </ul>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="any-site">
-        <div>
-          <div class="tags"><span class="tag">JavaScript</span></div>
-          <h3>Any site</h3>
+      <li id="any-site">
+        <div class="row__head"><svg width="64" height="64" data-sign="triangle"></svg><h3 class="row__title">Any site</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>JavaScript</li></ul>
           <p><code>npm install no-thanks.js</code>, or from a CDN: <code>https://cdn.jsdelivr.net/npm/no-thanks.js/dist/no-thanks.js</code> and <code>.css</code>. With several purposes, use <code>no-thanks-purposes.js</code> and <code>.css</code>.</p>
           <pre><code>&lt;link rel="stylesheet" href="dist/no-thanks.css"&gt;
 &lt;script&gt;
@@ -423,12 +401,12 @@ composer require cgsoft/no-thanks</code></pre>
             <dt>buttonClass</dt><dd>An extra class on the banner's buttons.</dd>
           </dl>
         </div>
-      </article>
+      </li>
 
-      <article class="feature" id="api">
-        <div>
-          <div class="tags"><span class="tag">JavaScript</span></div>
-          <h3>API</h3>
+      <li id="api">
+        <div class="row__head"><svg width="64" height="64" data-sign="sun"></svg><h3 class="row__title">API</h3></div>
+        <div class="row__body">
+          <ul class="chips"><li>JavaScript</li></ul>
           <pre><code>noThanks.open();                       // reopens the banner
 noThanks.consent;                      // true when everything is allowed
 noThanks.allows('videos');             // one purpose
@@ -439,17 +417,15 @@ document.addEventListener('no-thanks:change', (e) =&gt; {
 });</code></pre>
           <p>Theming: <code>--no-thanks-bg</code>, <code>-color</code>, <code>-accent</code>, <code>-accent-color</code>, <code>-radius</code>, <code>-shadow</code>, <code>-offset</code>, <code>-ok</code> and <code>-some</code>.</p>
         </div>
-      </article>
-    </section>
+      </li>
+    </ul>
+  </section>
 
-  </div>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span>No Thanks, by <a href="https://corentingautier.dev/">Corentin Gautier</a>. Released under the <a href="https://github.com/corentin-gautier/no-thanks/blob/main/LICENSE" rel="noopener" target="_blank">GPL-3.0</a> license.</span>
-    <span><a href="https://www.npmjs.com/package/no-thanks.js" rel="noopener" target="_blank">npm</a> · <a href="https://github.com/corentin-gautier/no-thanks/issues" rel="noopener" target="_blank">Report an issue</a> · <a href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a></span>
-  </div>
+<footer class="site-footer grid">
+  <p>No Thanks, by <a href="https://corentingautier.dev/">Corentin Gautier</a>. Released under the <a href="https://github.com/corentin-gautier/no-thanks/blob/main/LICENSE" rel="noopener" target="_blank">GPL-3.0</a> license.</p>
+  <p><a href="https://www.npmjs.com/package/no-thanks.js" rel="noopener" target="_blank">npm</a> · <a href="https://github.com/corentin-gautier/no-thanks/issues" rel="noopener" target="_blank">Report an issue</a> · <a href="https://ko-fi.com/corentingautier" rel="noopener" target="_blank">Support on Ko-fi</a></p>
 </footer>
 
 <script>
@@ -460,5 +436,6 @@ document.addEventListener('no-thanks:change', (e) =&gt; {
     out.className = 'ran';
   }
 </script>
+<script type="module" src="https://corentingautier.dev/design-system/lines.js"></script>
 </body>
 </html>

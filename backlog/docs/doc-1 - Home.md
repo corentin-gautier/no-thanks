@@ -7,3 +7,4 @@ type: readme
 No Thanks: an ultra-light consent banner (JS library + WordPress plugin), built for the forge (`~/Projects/forge`) and usable on any site. Usage is in the root README.
 
 - [Design](/documentation/2/design)
+- [Site](/documentation/3/site)
